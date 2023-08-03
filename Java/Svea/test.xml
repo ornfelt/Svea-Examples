@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<payment>
+<paymentmethod>SVEACARDPAY</paymentmethod>
+<currency>SEK</currency>
+<amount>500</amount>
+<vat>100</vat>
+<customerrefno>125123123</customerrefno>
+<returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-
+admin/admin/merchantresponsetest.xhtml</returnurl>
+<lang>en</lang>
+</payment>
