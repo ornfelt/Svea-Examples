@@ -1,8 +1,8 @@
 <?php
 
 $orderId = "8906830";
-$merchantId = "124842";
-$secretWord = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+$merchantId = "123";
+$secretWord = "xxx";
 
 class TestClass {
 

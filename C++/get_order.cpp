@@ -18,8 +18,8 @@
 */
 
 std::string order_id = "8906830";
-std::string merchant_id = "124842";
-std::string secret_word = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+std::string merchant_id = "123";
+std::string secret_word = "xxx";
 
 class TestClass {
     public:

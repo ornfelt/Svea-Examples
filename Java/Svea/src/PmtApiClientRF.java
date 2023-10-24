@@ -54,7 +54,7 @@ public class PmtApiClientRF {
 	 * 
 	 */
 	public void init() {
-		init("https://paymentadminapistage.svea.com", "124842", "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW");
+		init("https://paymentadminapistage.svea.com", "123", "xxx");
 	}
 	
 	/**

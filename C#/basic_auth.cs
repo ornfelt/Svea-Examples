@@ -24,8 +24,8 @@ namespace SveaAuthentication
 
         static void CreateAuthenticationToken(out string token, out string timestamp, string message = null)
         {
-            const int merchantId = 124842;
-            const string secretKey = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+            const int merchantId = 123;
+            const string secretKey = "xxx";
             message = message ?? string.Empty;
             timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
