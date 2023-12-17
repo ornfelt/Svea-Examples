@@ -2,7 +2,9 @@ open System
 open System.Net.Http
 open System.Text
 
-[<EntryPoint>]
+// Usage: dotnet fsi .\get_order.fsx
+
+// [<EntryPoint>]
 let main argv =
     async {
         let url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure"
@@ -46,3 +48,5 @@ let main argv =
 
         return 0
     } |> Async.RunSynchronously
+
+main [||]
