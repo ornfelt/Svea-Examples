@@ -1,0 +1,13 @@
+[package]
+name = "get_order"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.11" # Check https://crates.io/crates/reqwest for the latest version
+tokio = { version = "1", features = ["full"] }
+chrono = "0.4"
+sha2 = "0.9"
+base64 = "0.13"
