@@ -6,10 +6,8 @@ use std::collections::HashMap;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 
 const ORDER_ID: &str = "8906830";
-//const MERCHANT_ID: &str = "123";
-//const SECRET_WORD: &str = "xxx";
-const MERCHANT_ID: &str = "124842";
-const SECRET_WORD: &str = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+const MERCHANT_ID: &str = "123";
+const SECRET_WORD: &str = "xxx";
 const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";
 const CONTENT_TYPE: &str = "application/json";
 
@@ -45,7 +43,6 @@ impl TestClass {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("Running main v2!");
     let test_instance = TestClass;
     let my_headers = test_instance.get_request_headers("", None)?;
 
