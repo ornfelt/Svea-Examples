@@ -9,7 +9,7 @@
 #include <openssl/buffer.h>
 
 // Usage:
-// g++ -o pg_request PGRequestTester.cpp -lcurl -lssl -lcrypto
+// g++ -o pg_request pg_request.cpp -lcurl -lssl -lcrypto
 // ./pg_request
 
 class PgRequest {
@@ -17,9 +17,10 @@ public:
     void makePostRequest() {
         std::string messageXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>125123123</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>";
         std::string encodedMessage = base64Encode(reinterpret_cast<const unsigned char*>(messageXML.c_str()), messageXML.length());
-        //std::cout << "Base64 Encoded Message (Post): " << encodedMessage << std::endl;
+        std::cout << "Base64 Encoded Message (Post): " << encodedMessage << std::endl;
         std::string secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
         std::string mac = getSha512Hash(encodedMessage + secret);
+        std::cout << "sha512 hashed message (Post): " << mac << std::endl;
 
         std::string postData = "merchantid=1200&message=" + encodedMessage + "&mac=" + mac;
         performHttpRequest("https://webpaypaymentgatewaystage.svea.com/webpay/payment", postData);
@@ -49,26 +50,6 @@ private:
         return ss.str();
     }
 
-    //std::string base64Encode(const unsigned char* buffer, size_t length) {
-    //    BIO* bio;
-    //    BIO* b64;
-    //    char* encoded;
-
-    //    b64 = BIO_new(BIO_f_base64());
-    //    bio = BIO_new(BIO_s_mem());
-    //    bio = BIO_push(b64, bio);
-
-    //    BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL); // No newlines
-    //    BIO_write(bio, buffer, length);
-    //    BIO_flush(bio);
-
-    //    size_t encodedLength = BIO_get_mem_data(bio, &encoded);
-
-    //    std::string encodedData(encoded, encodedLength - 1); // Remove the newline character
-    //    BIO_free_all(bio);
-    //    return encodedData;
-    //}
-
     std::string base64Encode(const unsigned char* buffer, size_t length) {
         BIO* b64 = BIO_new(BIO_f_base64());
         BIO* bio = BIO_new(BIO_s_mem());
@@ -88,6 +69,7 @@ private:
         return encodedData;
     }
 
+
     static size_t writeFunction(void* ptr, size_t size, size_t nmemb, std::string* data) {
         data->append((char*)ptr, size * nmemb);
         return size * nmemb;
@@ -98,6 +80,8 @@ private:
         if (curl) {
             curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData.c_str());
+            curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+            curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
 
             // Response information
             std::string responseString;
@@ -134,7 +118,7 @@ private:
 
 int main() {
     PgRequest pgRequest;
-    pgRequest.makePostRequest();
+    //pgRequest.makePostRequest(); // This gets 400 bad request for some reason. See pg.cpp for post request.
     pgRequest.makeGetQueryTransactionIdRequest();
     return 0;
 }

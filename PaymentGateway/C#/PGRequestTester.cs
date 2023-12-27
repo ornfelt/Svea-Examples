@@ -8,11 +8,11 @@ using System.Xml.Linq;
 
 namespace TestRequests
 {
-    internal class PGRequestTester
+    internal class PgRequestTester
     {
         private HttpClient _httpClient;
 
-        public PGRequestTester()
+        public PgRequestTester()
         {
             _httpClient = new HttpClient();
         }

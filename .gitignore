@@ -225,3 +225,11 @@ msbuild.wrn
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Linux executables
+Webpay/C++/create_order
+Webpay/C++/get_order
+PaymentGateway/C++/pg_request
+PaymentGateway/C++/pg
+Checkout/C++/get_order
+Checkout/C++/pa_get_order
