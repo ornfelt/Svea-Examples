@@ -1,14 +1,32 @@
-use reqwest;
-use std::error::Error;
+// Requires:
+// sudo apt-get install libcurl4-openssl-dev
+// or: yay -S libcurl-openssl-1.0
+// Usage: g++ -o create_order create_order.cpp -lcurl
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    let client = reqwest::Client::new();
-    let url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
-    let action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+#include <iostream>
+#include <string>
+#include <curl/curl.h>
 
-    let soap_envelope = r#"
-    <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+// Callback function writes data to a std::string
+static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp) {
+    userp->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
+int main() {
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    curl = curl_easy_init();
+    if(curl) {
+        const char *url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
+        const char *soapAction = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+
+        std::string soapEnvelope = R"(
+        <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay">
             <soap:Header/>
             <soap:Body>
                 <web:CreateOrderEu>
@@ -63,25 +81,31 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     </web:request>
                 </web:CreateOrderEu>
             </soap:Body>
-    </soap:Envelope>
-    "#;
+        </soap:Envelope>
+        )";
 
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(reqwest::header::CONTENT_TYPE, "application/soap+xml;charset=UTF-8".parse()?);
-    if !action.is_empty() {
-        headers.insert("SOAPAction", action.parse()?);
+        struct curl_slist *headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/soap+xml;charset=UTF-8");
+        headers = curl_slist_append(headers, ("SOAPAction: " + std::string(soapAction)).c_str());
+
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, soapEnvelope.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, soapEnvelope.length());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+
+        res = curl_easy_perform(curl);
+
+        if(res != CURLE_OK)
+            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+        else
+            std::cout << "Response: " << readBuffer << std::endl;
+
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
     }
 
-    let res = client.post(url)
-        .headers(headers)
-        .body(soap_envelope.to_string())
-        .send()
-        .await?;
-
-    println!("Response Code: {}", res.status());
-
-    let response_body = res.text().await?;
-    println!("Response: {}", response_body);
-
-    Ok(())
+    curl_global_cleanup();
+    return 0;
 }

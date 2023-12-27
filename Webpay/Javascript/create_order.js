@@ -1,18 +1,17 @@
-use reqwest;
-use std::error::Error;
+async function main() {
+    const url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
+    const action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+    const headers = {
+        "Content-Type": "application/soap+xml; charset=utf-8",
+        "SOAPAction": action
+    };
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    let client = reqwest::Client::new();
-    let url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
-    let action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
-
-    let soap_envelope = r#"
+    const soapEnvelope = `
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <soap:Header/>
-            <soap:Body>
-                <web:CreateOrderEu>
-                    <web:request>
+        <soap:Header/>
+        <soap:Body>
+            <web:CreateOrderEu>
+                <web:request>
                         <web:Auth>
                             <web:ClientNumber>79021</web:ClientNumber>
                             <web:Username>sverigetest</web:Username>
@@ -60,28 +59,26 @@ async fn main() -> Result<(), Box<dyn Error>> {
                             <web:OrderDate>2023-12-18T11:07:23</web:OrderDate>
                             <web:OrderType>Invoice</web:OrderType>
                         </web:CreateOrderInformation>
-                    </web:request>
-                </web:CreateOrderEu>
-            </soap:Body>
+                </web:request>
+            </web:CreateOrderEu>
+        </soap:Body>
     </soap:Envelope>
-    "#;
+    `;
 
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(reqwest::header::CONTENT_TYPE, "application/soap+xml;charset=UTF-8".parse()?);
-    if !action.is_empty() {
-        headers.insert("SOAPAction", action.parse()?);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: soapEnvelope
+        });
+
+        const responseText = await response.text();
+        console.log("Response Code:", response.status);
+        console.log("Response:");
+        console.log(responseText);
+    } catch (e) {
+        console.error(e);
     }
-
-    let res = client.post(url)
-        .headers(headers)
-        .body(soap_envelope.to_string())
-        .send()
-        .await?;
-
-    println!("Response Code: {}", res.status());
-
-    let response_body = res.text().await?;
-    println!("Response: {}", response_body);
-
-    Ok(())
 }
+
+main();

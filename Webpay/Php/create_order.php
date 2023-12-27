@@ -1,14 +1,10 @@
-use reqwest;
-use std::error::Error;
+<?php
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    let client = reqwest::Client::new();
-    let url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
-    let action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+$url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
+$action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
 
-    let soap_envelope = r#"
-    <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+$soapEnvelope = <<<XML
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <soap:Header/>
             <soap:Body>
                 <web:CreateOrderEu>
@@ -63,25 +59,32 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     </web:request>
                 </web:CreateOrderEu>
             </soap:Body>
-    </soap:Envelope>
-    "#;
+</soap:Envelope>
+XML;
 
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(reqwest::header::CONTENT_TYPE, "application/soap+xml;charset=UTF-8".parse()?);
-    if !action.is_empty() {
-        headers.insert("SOAPAction", action.parse()?);
-    }
+$headers = [
+    "Content-Type: application/soap+xml;charset=UTF-8",
+];
 
-    let res = client.post(url)
-        .headers(headers)
-        .body(soap_envelope.to_string())
-        .send()
-        .await?;
-
-    println!("Response Code: {}", res.status());
-
-    let response_body = res.text().await?;
-    println!("Response: {}", response_body);
-
-    Ok(())
+if (!empty($action)) {
+    $headers[] = "SOAPAction: $action";
 }
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $soapEnvelope);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+
+if (curl_errno($ch)) {
+    echo "Error: " . curl_error($ch);
+} else {
+    $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    echo "Response Code: " . $statusCode . "\n";
+    echo "Response: \n" . $response;
+}
+
+curl_close($ch);

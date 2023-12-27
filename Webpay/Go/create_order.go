@@ -1,13 +1,17 @@
-use reqwest;
-use std::error::Error;
+package main
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    let client = reqwest::Client::new();
-    let url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
-    let action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+import (
+    "bytes"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
 
-    let soap_envelope = r#"
+func main() {
+    url := "https://webpaywsstage.svea.com/sveawebpay.asmx"
+    action := "https://webservices.sveaekonomi.se/webpay/CreateOrderEu"
+
+    soapEnvelope := `
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <soap:Header/>
             <soap:Body>
@@ -63,25 +67,35 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     </web:request>
                 </web:CreateOrderEu>
             </soap:Body>
-    </soap:Envelope>
-    "#;
+    </soap:Envelope>`
 
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(reqwest::header::CONTENT_TYPE, "application/soap+xml;charset=UTF-8".parse()?);
-    if !action.is_empty() {
-        headers.insert("SOAPAction", action.parse()?);
+    req, err := http.NewRequest("POST", url, bytes.NewBufferString(soapEnvelope))
+    if err != nil {
+        fmt.Println("Error creating request: ", err)
+        return
     }
 
-    let res = client.post(url)
-        .headers(headers)
-        .body(soap_envelope.to_string())
-        .send()
-        .await?;
+    req.Header.Set("Content-Type", "application/soap+xml;charset=UTF-8")
+    if action != "" {
+        req.Header.Set("SOAPAction", action)
+    }
 
-    println!("Response Code: {}", res.status());
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error sending request: ", err)
+        return
+    }
+    defer resp.Body.Close()
 
-    let response_body = res.text().await?;
-    println!("Response: {}", response_body);
+    fmt.Println("Response Code: ", resp.StatusCode)
 
-    Ok(())
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        fmt.Println("Error reading response: ", err)
+        return
+    }
+
+    fmt.Println("Response:")
+    fmt.Println(string(body))
 }

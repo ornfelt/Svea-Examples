@@ -27,7 +27,8 @@ class pg_request:
                 "mac": mac
             }
             response = self._http_client.post(url, data=content)
-            print(response.text)
+            print("Response status code:", response.status_code)
+            print("Response message:", response.text)
         except Exception as e:
             print(e)
 
