@@ -1,0 +1,54 @@
+{
+    "countryCode": "SE",
+    "currency": "SEK",
+    "locale": "sv-SE",
+    "clientOrderNumber": "my_order_id",
+    "merchantSettings": {
+        "CheckoutValidationCallBackUri": "https://your.domain/validation-callback/{checkout.order.uri}",
+        "PushUri": "https://your.domain/push-callback/{checkout.order.uri}",
+        "TermsUri": "https://your.domain/terms/",
+        "CheckoutUri": "https://your.domain/checkout-callback/",
+        "ConfirmationUri": "https://your.domain/confirmation-callback/",
+        "ActivePartPaymentCampaigns": null,
+        "PromotedPartPaymentCampaign": 0
+    },
+    "cart": {
+        "Items": [
+            {
+                "ArticleNumber": "ABC80",
+                "Name": "Computer",
+                "Quantity": 300,
+                "UnitPrice": 500000,
+                "DiscountPercent": 1000,
+                "VatPercent": 2500,
+                "Unit": null,
+                "TemporaryReference": null,
+                "RowNumber": 1,
+                "MerchantData": null
+            },
+            {
+                "ArticleNumber": "ABC81",
+                "Name": "AnotherComputer",
+                "Quantity": 200,
+                "UnitPrice": 400000,
+                "DiscountAmount": 10000,
+                "VatPercent": 2500,
+                "Unit": null,
+                "TemporaryReference": null,
+                "RowNumber": 2,
+                "MerchantData": null
+            }
+        ]
+    },
+    "presetValues": [
+        {
+            "TypeName": "EmailAddress",
+            "Value": "test.person@svea.com",
+            "IsReadonly": true
+        }
+    ],
+    "identityFlags": null,
+    "requireElectronicIdAuthentication": false,
+    "partnerKey": null,
+    "merchantData": null
+}

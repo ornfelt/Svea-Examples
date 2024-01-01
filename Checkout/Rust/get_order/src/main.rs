@@ -6,9 +6,10 @@ use std::collections::HashMap;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 
 const ORDER_ID: &str = "8906830";
-const MERCHANT_ID: &str = "123";
-const SECRET_WORD: &str = "xxx";
-const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";
+const MERCHANT_ID: &str = "124842";
+const SECRET_WORD: &str = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+//const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";
+const BASE_URL: &str = "https://checkoutapistage.svea.com/api/orders/";
 const CONTENT_TYPE: &str = "application/json";
 
 struct TestClass;
@@ -43,27 +44,29 @@ impl TestClass {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!("Running GET request for Checkout (Rust)");
     let test_instance = TestClass;
     let my_headers = test_instance.get_request_headers("", None)?;
 
-    println!("{:?}", my_headers);
+    //println!("{:?}", my_headers);
 
     let url = format!("{}{}", BASE_URL, ORDER_ID);
 
-    println!("Fetching order: {}", ORDER_ID);
+    //println!("Fetching order: {}", ORDER_ID);
     let client = reqwest::Client::new();
     let res = client.get(&url)
         .headers(my_headers)
         .send()
         .await?;
 
-    println!("Response Status: {}", res.status());
+    //println!("Response Status: {}", res.status());
 
     if res.status().is_success() {
         let body = res.text().await?;
-        println!("{}", body);
+        //println!("{}", body);
+        println!("Success!");
     } else {
-        println!("Error: Request returned non-OK status code");
+        println!("Failed...");
     }
 
     Ok(())

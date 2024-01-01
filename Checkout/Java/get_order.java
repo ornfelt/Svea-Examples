@@ -1,5 +1,6 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URI;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -14,20 +15,20 @@ import java.util.Map;
 public class get_order {
 
     private static final String ORDER_ID = "8906830";
-    //private static final String MERCHANT_ID = "123";
     private static final String MERCHANT_ID = "124842";
-    //private static final String SECRET_WORD = "xxx";
     private static final String SECRET_WORD = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
-    private static final String BASE_URL = "https://paymentadminapistage.svea.com/api/v1/orders/";
-    // private static final String BASE_URL = "https://checkoutapistage.svea.com/api/orders/";
+    //private static final String BASE_URL = "https://paymentadminapistage.svea.com/api/v1/orders/";
+    private static final String BASE_URL = "https://checkoutapistage.svea.com/api/orders/";
     private static final String CONTENT_TYPE = "application/json";
 
     public static void main(String[] args) {
+        System.out.println("Running GET request for Checkout (Java)");
         try {
             String url = BASE_URL + ORDER_ID;
             Map<String, String> myHeaders = getRequestHeaders("", null);
 
-            URL obj = new URL(url);
+            //URL obj = new URL(url);
+            URL obj = URI.create(url).toURL();
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("GET");
 
@@ -36,7 +37,11 @@ public class get_order {
             }
 
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
+            //System.out.println("Response Code : " + responseCode);
+            if (responseCode == 200)
+                System.out.println("Success!");
+            else
+                System.out.println("Failed...");
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -48,7 +53,7 @@ public class get_order {
                 }
                 in.close();
 
-                System.out.println(response.toString());
+                //System.out.println(response.toString());
             } else {
                 System.out.println("Error: Request returned non-OK status code");
             }

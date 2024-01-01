@@ -1,4 +1,5 @@
 async function main() {
+    console.log("Running Create request for Webpay (Javascript)");
     const url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
     const action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
     const headers = {
@@ -73,9 +74,15 @@ async function main() {
         });
 
         const responseText = await response.text();
-        console.log("Response Code:", response.status);
-        console.log("Response:");
-        console.log(responseText);
+        //console.log("Response Code:", response.status);
+        //console.log("Response:");
+        //console.log(responseText);
+
+        if (response.status === 200 && responseText.toLowerCase().includes("accepted>true"))
+            console.log("Success!");
+        else
+            console.log("Failed...");
+        console.log("----------------------------------------------------------");
     } catch (e) {
         console.error(e);
     }

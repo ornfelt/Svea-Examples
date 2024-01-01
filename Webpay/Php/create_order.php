@@ -1,5 +1,7 @@
 <?php
 
+echo "Running Create request for PaymentGateway (Php)\n";
+
 $url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
 $action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
 
@@ -83,8 +85,13 @@ if (curl_errno($ch)) {
     echo "Error: " . curl_error($ch);
 } else {
     $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    echo "Response Code: " . $statusCode . "\n";
-    echo "Response: \n" . $response;
+    //echo "Response Code: " . $statusCode . "\n";
+    //echo "Response: \n" . $response;
+    if ($statusCode == 200 && strpos(strtolower($response), "accepted>true") !== false)
+        echo "Success!\n";
+    else
+        echo "Failed...\n";
+    echo "----------------------------------------------------------\n";
 }
 
 curl_close($ch);

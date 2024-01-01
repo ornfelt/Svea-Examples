@@ -1,6 +1,7 @@
 import requests
 
 def get_orders():
+    print("Running GET request for Webpay (Python)")
     url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure"
     soap_action = "http://tempuri.org/IAdminService/GetOrders"
     headers = {
@@ -35,8 +36,12 @@ def get_orders():
 
     response = requests.post(url, data=soap_envelope, headers=headers)
 
-    print("Response Code:", response.status_code)
-    print("Response:", response.text)
+    #print("Response Code:", response.status_code)
+    #print("Response:", response.text)
+    if response.status_code == 200:
+        print("Success!")
+    else:
+        print("Failed...")
 
 if __name__ == "__main__":
     get_orders()

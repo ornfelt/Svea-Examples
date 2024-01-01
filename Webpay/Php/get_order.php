@@ -1,5 +1,7 @@
 <?php
 
+echo "Running GET request for Webpay (Php)\n";
+
 $url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure";
 $action = "http://tempuri.org/IAdminService/GetOrders";
 
@@ -44,8 +46,12 @@ $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 if ($response === false) {
     echo "Error: " . curl_error($ch);
 } else {
-    echo "Response Code : " . $responseCode . "\n";
-    echo "Response: " . $response . "\n";
+    //echo "Response Code : " . $responseCode . "\n";
+    //echo "Response: " . $response . "\n";
+    if ($responseCode == 200)
+        echo "Success!\n";
+    else
+        echo "Failed...\n";
 }
 
 curl_close($ch);

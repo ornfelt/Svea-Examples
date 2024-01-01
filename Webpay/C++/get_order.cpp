@@ -1,11 +1,13 @@
 // Requires:
 // sudo apt-get install libcurl4-openssl-dev
 // or: yay -S libcurl-openssl-1.0
-// Usage: g++ -o get_order get_order.cpp -lcurl
+// Usage: g++ -o get_order get_order.cpp -lcurl && ./get_order
 
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
+#include <algorithm>
+#include <cctype>
 
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s) {
     size_t newLength = size * nmemb;
@@ -27,6 +29,7 @@ int main() {
 
     curl = curl_easy_init();
     if(curl) {
+        std::cout << "Running GET request for Webpay (C++)" << std::endl;
         std::string url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure";
         std::string soapAction = "http://tempuri.org/IAdminService/GetOrders";
         std::string soapEnvelope = R"(
@@ -65,7 +68,7 @@ int main() {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // Enable verbose output
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // Enable verbose output
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // Follow redirects if any
         // curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); // Disable SSL verification (only for debugging)
 
@@ -73,8 +76,19 @@ int main() {
 
         if(res != CURLE_OK)
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-        else
-            std::cout << "Response: " << readBuffer << std::endl;
+        else {
+            //std::cout << "Response: " << readBuffer << std::endl;
+            long httpCode = 0;
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
+
+            std::transform(readBuffer.begin(), readBuffer.end(), readBuffer.begin(), 
+                           [](unsigned char c){ return std::tolower(c); });
+
+            if (httpCode == 200)
+                std::cout << "Success!" << std::endl;
+            else
+                std::cout << "Failed..." << std::endl;
+        }
 
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);

@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+    "strings"
 )
 
 func main() {
+    fmt.Println("Running GET request for Webpay (Go)")
 	url := "https://webpayadminservicestage.svea.com/AdminService.svc/secure"
 	soapAction := "http://tempuri.org/IAdminService/GetOrders"
 
@@ -57,8 +59,13 @@ func main() {
 		fmt.Println("Error reading response body:", err)
 		return
 	}
+	//fmt.Printf("Response Code: %d\n", resp.StatusCode)
+	//fmt.Println("Response:", string(body))
 
-	fmt.Printf("Response Code: %d\n", resp.StatusCode)
-	fmt.Println("Response:", string(body))
+    if resp.StatusCode == 200 && strings.Contains(strings.ToLower(string(body)), "accepted>true") {
+        fmt.Println("Success!")
+    } else {
+        fmt.Println("Failed...")
+    }
 }
 

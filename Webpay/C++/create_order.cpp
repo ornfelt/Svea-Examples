@@ -1,11 +1,13 @@
 // Requires:
 // sudo apt-get install libcurl4-openssl-dev
 // or: yay -S libcurl-openssl-1.0
-// Usage: g++ -o create_order create_order.cpp -lcurl
+// Usage: g++ -o create_order create_order.cpp -lcurl && ./create_order
 
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
+#include <algorithm>
+#include <cctype>
 
 // Callback function writes data to a std::string
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp) {
@@ -22,6 +24,7 @@ int main() {
 
     curl = curl_easy_init();
     if(curl) {
+        std::cout << "Running Create request for Webpay (C++)" << std::endl;
         const char *url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
         const char *soapAction = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
 
@@ -98,12 +101,26 @@ int main() {
         res = curl_easy_perform(curl);
 
         if(res != CURLE_OK)
-            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
-        else
-            std::cout << "Response: " << readBuffer << std::endl;
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        else {
+            //std::cout << "Response: " << readBuffer << std::endl;
+            long httpCode = 0;
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
+
+            std::transform(readBuffer.begin(), readBuffer.end(), readBuffer.begin(), 
+                           [](unsigned char c){ return std::tolower(c); });
+
+            if (httpCode == 200 && readBuffer.find("accepted>true") != std::string::npos)
+                std::cout << "Success!" << std::endl;
+            else if (httpCode == 200)
+                std::cout << "Success!" << std::endl;
+            else
+                std::cout << "Failed..." << std::endl;
+        }
 
         curl_slist_free_all(headers);
         curl_easy_cleanup(curl);
+        std::cout << "----------------------------------------------------------" << std::endl;
     }
 
     curl_global_cleanup();

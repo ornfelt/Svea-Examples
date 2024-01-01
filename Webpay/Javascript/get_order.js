@@ -3,6 +3,7 @@
 const axios = require('axios');
 
 async function getOrders() {
+    console.log("Running GET request for Webpay (Javascript)");
     try {
         const url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure";
         const soapAction = "http://tempuri.org/IAdminService/GetOrders";
@@ -39,9 +40,13 @@ async function getOrders() {
         };
 
         const response = await axios.post(url, soapEnvelope, config);
+        //console.log("Response Code:", response.status);
+        //console.log("Response:", response.data);
 
-        console.log("Response Code:", response.status);
-        console.log("Response:", response.data);
+        if (response.status === 200)
+            console.log("Success!");
+        else
+            console.log("Failed...");
     } catch (error) {
         console.error(error);
     }

@@ -5,9 +5,11 @@ import (
     "fmt"
     "io/ioutil"
     "net/http"
+    "strings"
 )
 
 func main() {
+    fmt.Println("Running Create request for Webpay (Go)")
     url := "https://webpaywsstage.svea.com/sveawebpay.asmx"
     action := "https://webservices.sveaekonomi.se/webpay/CreateOrderEu"
 
@@ -88,14 +90,20 @@ func main() {
     }
     defer resp.Body.Close()
 
-    fmt.Println("Response Code: ", resp.StatusCode)
+    //fmt.Println("Response Code: ", resp.StatusCode)
 
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
-        fmt.Println("Error reading response: ", err)
+        //fmt.Println("Error reading response: ", err)
         return
     }
+    //fmt.Println("Response:")
+    //fmt.Println(string(body))
 
-    fmt.Println("Response:")
-    fmt.Println(string(body))
+    if resp.StatusCode == 200 && strings.Contains(strings.ToLower(string(body)), "accepted>true") {
+        fmt.Println("Success!")
+    } else {
+        fmt.Println("Failed...")
+    }
+    fmt.Println("----------------------------------------------------------");
 }

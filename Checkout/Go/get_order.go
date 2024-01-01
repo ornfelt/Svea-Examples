@@ -7,14 +7,15 @@ import (
 	"net/http"
 	"time"
     "io"
+    "strings"
 )
 
 const (
 	orderID     = "8906830"
-	merchantID  = "123"
-	secretWord  = "xxx"
-	baseURL     = "https://paymentadminapistage.svea.com/api/v1/orders/"
-    //baseURL     = "https://checkoutapistage.svea.com/api/orders/"
+	merchantID  = "124842"
+	secretWord  = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW"
+	//baseURL     = "https://paymentadminapistage.svea.com/api/v1/orders/"
+    baseURL     = "https://checkoutapistage.svea.com/api/orders/"
 	contentType = "application/json"
 )
 
@@ -48,14 +49,15 @@ func (tc *TestClass) getAuthToken(timestamp, requestBody string) string {
 }
 
 func main() {
+    fmt.Println("Running GET request for Checkout (Go)")
 	testInstance := &TestClass{}
 	myHeaders := testInstance.getRequestHeaders("", nil)
-	fmt.Println(myHeaders)
+	//fmt.Println(myHeaders)
 
 	url := baseURL + orderID
 	// payload := map[string]interface{}{}
 
-	fmt.Println("Fetching order:", orderID)
+	//fmt.Println("Fetching order:", orderID)
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -74,7 +76,7 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("Response Status:", resp.Status)
+	//fmt.Println("Response Status:", resp.Status)
 
     if resp.StatusCode == http.StatusOK {
         bodyBytes, err := io.ReadAll(resp.Body)
@@ -82,7 +84,12 @@ func main() {
             fmt.Println("Error")
         }
         bodyString := string(bodyBytes)
-        fmt.Println(bodyString)
+        //fmt.Println(bodyString)
+        if resp.StatusCode == 200 && strings.Contains(strings.ToLower(bodyString), "iframe") {
+            fmt.Println("Success!")
+        } else {
+            fmt.Println("Failed...")
+        }
     }
 
 	if resp.StatusCode != http.StatusOK {

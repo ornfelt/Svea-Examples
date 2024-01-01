@@ -3,11 +3,13 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class get_order {
 	
     public static void main(String[] args) {
+        System.out.println("Running GET request for Webpay (Java)");
         try {
             String url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure";
             String action = "http://tempuri.org/IAdminService/GetOrders";
@@ -36,7 +38,8 @@ public class get_order {
                 "    </soap:Body>\r\n" +
                 "</soap:Envelope>";
 
-            URL obj = new URL(url);
+            //URL obj = new URL(url);
+            URL obj = URI.create(url).toURL();
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
             con.setRequestMethod("GET");
@@ -50,7 +53,7 @@ public class get_order {
             wr.close();
 
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
+            //System.out.println("Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
             String inputLine;
@@ -61,8 +64,12 @@ public class get_order {
             }
             in.close();
 
-            System.out.println("Response:");
-            System.out.println(response.toString());
+            //System.out.println("Response:");
+            //System.out.println(response.toString());
+            if (responseCode == 200)
+                System.out.println("Success!");
+            else
+                System.out.println("Failed...");
         } catch (Exception e) {
             e.printStackTrace();
         }

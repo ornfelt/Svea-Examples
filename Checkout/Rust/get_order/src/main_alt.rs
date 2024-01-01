@@ -9,7 +9,8 @@ use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 const ORDER_ID: &str = "8906830";
 const MERCHANT_ID: &str = "123";
 const SECRET_WORD: &str = "xxx";
-const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";
+//const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";
+const BASE_URL: &str = "https://checkoutapistage.svea.com/api/orders/";
 const CONTENT_TYPE: &str = "application/json";
 
 struct TestClass;
@@ -42,6 +43,7 @@ impl TestClass {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!("Running GET request for Checkout (Rust)");
     let rt = Runtime::new()?;
     rt.block_on(async {
         let test_instance = TestClass;
@@ -67,9 +69,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         if res.status().is_success() {
             let body = res.text().await?;
-            println!("{}", body);
+            //println!("{}", body);
+            println!("Success!");
         } else {
-            println!("Error: Request returned non-OK status code");
+            println!("Failed...");
         }
 
         Ok(())

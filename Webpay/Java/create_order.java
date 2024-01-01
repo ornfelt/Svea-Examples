@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URI;
 
 public class create_order {
 
     public static void main(String[] args) {
+        System.out.println("Running Create request for Webpay (Java)");
         try {
             String url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
             String action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
@@ -69,7 +71,8 @@ public class create_order {
 			+ "</soap:Body>"
 			+ "</soap:Envelope>";
 
-            URL obj = new URL(url);
+            //URL obj = new URL(url);
+            URL obj = URI.create(url).toURL();
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
             // Setting basic post request
@@ -87,7 +90,7 @@ public class create_order {
             os.close();
 
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
+            //System.out.println("Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
@@ -98,8 +101,13 @@ public class create_order {
             }
             in.close();
 
-            System.out.println("Response:");
-            System.out.println(response.toString());
+            //System.out.println("Response:");
+            //System.out.println(response.toString());
+            if (responseCode == 200 && response.toString().toLowerCase().contains("accepted>true"))
+                System.out.println("Success!");
+            else
+                System.out.println("Failed...");
+            System.out.println("----------------------------------------------------------");
         } catch (Exception e) {
             e.printStackTrace();
         }

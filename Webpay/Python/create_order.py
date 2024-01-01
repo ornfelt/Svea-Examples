@@ -1,6 +1,7 @@
 import requests
 
 def main():
+    print("Running Create request for Webpay (Python)")
     try:
         url = "https://webpaywsstage.svea.com/sveawebpay.asmx"
         action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu"
@@ -69,9 +70,15 @@ def main():
         """
 
         response = requests.post(url, headers=headers, data=soap_envelope)
-        print("Response Code:", response.status_code)
-        print("Response:")
-        print(response.text)
+        #print("Response Code:", response.status_code)
+        #print("Response:")
+        #print(response.text)
+
+        if response.status_code == 200 and "accepted>true" in response.text.lower():
+            print("Success!")
+        else:
+            print("Failed...")
+        print("----------------------------------------------------------")
         
     except Exception as e:
         print(e)
