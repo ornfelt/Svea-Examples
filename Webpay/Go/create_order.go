@@ -4,14 +4,17 @@ import (
     "bytes"
     "fmt"
     "io/ioutil"
+    "math/rand"
     "net/http"
     "strings"
+    "time"
 )
 
 func main() {
     fmt.Println("Running Create request for Webpay (Go)")
     url := "https://webpaywsstage.svea.com/sveawebpay.asmx"
     action := "https://webservices.sveaekonomi.se/webpay/CreateOrderEu"
+    randomOrderID := generateRandomString(8)
 
     soapEnvelope := `
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
@@ -25,7 +28,7 @@ func main() {
                             <web:Password>sverigetest</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
-                            <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                            <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                             <web:OrderRows>
                                 <web:OrderRow>
                                     <web:ArticleNumber>123</web:ArticleNumber>
@@ -71,6 +74,8 @@ func main() {
             </soap:Body>
     </soap:Envelope>`
 
+    soapEnvelope = strings.ReplaceAll(soapEnvelope, "my_order_id", randomOrderID)
+
     req, err := http.NewRequest("POST", url, bytes.NewBufferString(soapEnvelope))
     if err != nil {
         fmt.Println("Error creating request: ", err)
@@ -106,4 +111,14 @@ func main() {
         fmt.Println("Failed...")
     }
     fmt.Println("----------------------------------------------------------");
+}
+
+func generateRandomString(length int) string {
+    const charset = "0123456789"
+    seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
+    b := make([]byte, length)
+    for i := range b {
+        b[i] = charset[seededRand.Intn(len(charset))]
+    }
+    return string(b)
 }

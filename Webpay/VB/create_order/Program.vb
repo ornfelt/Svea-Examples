@@ -9,8 +9,9 @@ Module Program
         Try
             Dim url As String = "https://webpaywsstage.svea.com/sveawebpay.asmx"
             Dim action As String = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu"
+            Dim randomOrderId As String = GenerateRandomOrderId()
 
-            Dim soapEnvelope As String = "<soap:Envelope xmlns:soap=""http://www.w3.org/2003/05/soap-envelope"" " & _
+            Dim soapTemplate As String = "<soap:Envelope xmlns:soap=""http://www.w3.org/2003/05/soap-envelope"" " & _
                                         "xmlns:web=""https://webservices.sveaekonomi.se/webpay"" " & _
                                         "xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">" & _
                                         "<soap:Header/>" & _
@@ -23,7 +24,7 @@ Module Program
                                         "<web:Password>sverigetest</web:Password>" & _
                                         "</web:Auth>" & _
                                         "<web:CreateOrderInformation>" & _
-                                        "<web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>" & _
+                                        "<web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>" & _
                                         "<web:OrderRows>" & _
                                         "<web:OrderRow>" & _
                                         "<web:ArticleNumber>123</web:ArticleNumber>" & _
@@ -69,6 +70,7 @@ Module Program
                                         "</soap:Body>" & _
                                         "</soap:Envelope>"
 
+            Dim soapEnvelope = soapTemplate.Replace("my_order_id", randomOrderId)
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "POST"
             request.ContentType = "application/soap+xml;charset=UTF-8"
@@ -100,4 +102,14 @@ Module Program
         End Try
         Console.WriteLine("----------------------------------------------------------")
     End Sub
+
+    Private Function GenerateRandomOrderId() As String
+        Dim random As New Random()
+        Dim orderId As New StringBuilder()
+        For i As Integer = 0 To 7
+            orderId.Append(random.Next(0, 10)) ' Append a random digit
+        Next
+        Return orderId.ToString()
+    End Function
+
 End Module

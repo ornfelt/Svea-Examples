@@ -28,7 +28,7 @@ func main() {
 func sendRequest() {
     fmt.Println("Running Create request for Checkout (Go)")
 
-    randomOrderID := generateRandomString(8)
+    randomOrderID := generateRandomString(15)
     body, err := readAndPrepareBody("create_order_payload.json", randomOrderID)
     if err != nil {
         fmt.Println(err)

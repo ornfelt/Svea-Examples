@@ -59,9 +59,9 @@ namespace Testing
         {
             var random = new Random();
             var orderId = new StringBuilder();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 15; i++)
             {
-                orderId.Append(random.Next(0, 10)); // Append a random digit
+                orderId.Append(random.Next(0, 10));
             }
             return orderId.ToString();
         }

@@ -3,7 +3,15 @@ open System.IO
 open System.Net
 open System.Text
 
-let soapEnvelope = 
+let generateRandomOrderId () =
+    let random = Random()
+    let orderId = StringBuilder()
+    for i in 0 .. 7 do
+        orderId.Append(random.Next(0, 10)) |> ignore
+    orderId.ToString()
+
+let randomOrderId = generateRandomOrderId()
+let soapTemplate = 
     """
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         <soap:Header/>
@@ -16,7 +24,7 @@ let soapEnvelope =
                         <web:Password>sverigetest</web:Password>
                     </web:Auth>
                     <web:CreateOrderInformation>
-                        <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                        <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                         <web:OrderRows>
                             <web:OrderRow>
                                 <web:ArticleNumber>123</web:ArticleNumber>
@@ -62,6 +70,7 @@ let soapEnvelope =
         </soap:Body>
     </soap:Envelope>
     """
+let soapEnvelope = soapTemplate.Replace("my_order_id", randomOrderId)
 
 let sendSoapRequest (url: string) (action: string) (soapXml: string) =
     async {

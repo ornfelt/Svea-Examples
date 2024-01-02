@@ -1,6 +1,7 @@
 extern crate hex;
 
-use rand::{distributions::Alphanumeric, Rng};
+use rand::Rng;
+use rand::distributions::Uniform;
 use reqwest;
 use serde_json::Value;
 use std::fs;
@@ -15,10 +16,11 @@ impl SveaAuth {
         println!("Running Create request for Checkout (Rust)");
         let client = reqwest::Client::new();
         let url = "https://checkoutapistage.svea.com/api/orders";
-        let random_order_id: String = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(8)
-            .map(char::from)
+        let rng = rand::thread_rng();
+        let range = Uniform::new_inclusive('0', '9');
+        let random_order_id: String = rng
+            .sample_iter(&range)
+            .take(15)
             .collect();
 
         let body = match fs::read_to_string("create_order_payload.json") {

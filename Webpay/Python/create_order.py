@@ -1,4 +1,5 @@
 import requests
+import random
 
 def main():
     print("Running Create request for Webpay (Python)")
@@ -9,8 +10,9 @@ def main():
             "Content-Type": "application/soap+xml; charset=utf-8",
             "SOAPAction": action
         }
+        random_order_id = ''.join(random.choices('0123456789', k=8))
 
-        soap_envelope = """
+        soap_template = """
         <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <soap:Header/>
             <soap:Body>
@@ -22,7 +24,7 @@ def main():
                             <web:Password>sverigetest</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
-                            <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                            <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                             <web:OrderRows>
                                 <web:OrderRow>
                                     <web:ArticleNumber>123</web:ArticleNumber>
@@ -69,6 +71,7 @@ def main():
         </soap:Envelope>
         """
 
+        soap_envelope = soap_template.replace("my_order_id", random_order_id)
         response = requests.post(url, headers=headers, data=soap_envelope)
         #print("Response Code:", response.status_code)
         #print("Response:")

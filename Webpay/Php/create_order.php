@@ -4,8 +4,9 @@ echo "Running Create request for PaymentGateway (Php)\n";
 
 $url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
 $action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+$randomOrderId = substr(str_shuffle(str_repeat('0123456789', 8)), 0, 8);
 
-$soapEnvelope = <<<XML
+$soapTemplate = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <soap:Header/>
             <soap:Body>
@@ -17,7 +18,7 @@ $soapEnvelope = <<<XML
                             <web:Password>sverigetest</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
-                            <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                            <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                             <web:OrderRows>
                                 <web:OrderRow>
                                     <web:ArticleNumber>123</web:ArticleNumber>
@@ -63,6 +64,8 @@ $soapEnvelope = <<<XML
             </soap:Body>
 </soap:Envelope>
 XML;
+
+$soapEnvelope = str_replace("my_order_id", $randomOrderId, $soapTemplate);
 
 $headers = [
     "Content-Type: application/soap+xml;charset=UTF-8",

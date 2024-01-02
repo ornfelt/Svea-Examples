@@ -45,7 +45,7 @@ class TestClass {
     }
 }
 
-console.log("Running GET request for Checkout (Node.js)");
+console.log("Running GET request for Checkout (Javascript)");
 const testInstance = new TestClass();
 const myHeaders = testInstance.getHeaders({'Content-Type': 'application/json'});
 //const url = `https://paymentadminapistage.svea.com/api/v1/orders/${orderId}`;

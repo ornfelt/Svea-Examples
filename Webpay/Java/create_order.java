@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URI;
+import java.util.Random;
 
 public class create_order {
 
@@ -13,8 +14,13 @@ public class create_order {
         try {
             String url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
             String action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+            Random random = new Random();
+            StringBuilder randomOrderId = new StringBuilder();
+            for (int i = 0; i < 8; i++) {
+                randomOrderId.append(random.nextInt(10));
+            }
 
-			String soapEnvelope = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:web=\"https://webservices.sveaekonomi.se/webpay\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">"
+			String soapTemplate = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:web=\"https://webservices.sveaekonomi.se/webpay\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">"
 			+ "<soap:Header/>"
 			+ "<soap:Body>"
 			+ "<web:CreateOrderEu>"
@@ -25,7 +31,7 @@ public class create_order {
 			+ "<web:Password>sverigetest</web:Password>"
 			+ "</web:Auth>"
 			+ "<web:CreateOrderInformation>"
-			+ "<web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>"
+			+ "<web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>"
 			+ "<web:OrderRows>"
 			+ "<web:OrderRow>"
 			+ "<web:ArticleNumber>123</web:ArticleNumber>"
@@ -70,6 +76,8 @@ public class create_order {
 			+ "</web:CreateOrderEu>"
 			+ "</soap:Body>"
 			+ "</soap:Envelope>";
+
+            String soapEnvelope = soapTemplate.replace("my_order_id", randomOrderId.toString());
 
             //URL obj = new URL(url);
             URL obj = URI.create(url).toURL();

@@ -51,7 +51,7 @@ Public Class SveaAuth
     Private Shared Function GenerateRandomOrderId() As String
         Dim random As New Random()
         Dim orderId As New StringBuilder()
-        For i As Integer = 0 To 7
+        For i As Integer = 0 To 14
             orderId.Append(random.Next(0, 10)) ' Append a random digit
         Next
         Return orderId.ToString()

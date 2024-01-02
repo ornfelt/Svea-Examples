@@ -8,6 +8,7 @@
 #include <curl/curl.h>
 #include <algorithm>
 #include <cctype>
+#include <random>
 
 // Callback function writes data to a std::string
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp) {
@@ -15,10 +16,24 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::stri
     return size * nmemb;
 }
 
+std::string generate_random_string(size_t length) {
+    const std::string characters = "0123456789";
+    std::random_device random_device;
+    std::mt19937 generator(random_device());
+    std::uniform_int_distribution<> distribution(0, characters.size() - 1);
+
+    std::string random_string;
+    for (size_t i = 0; i < length; ++i) {
+        random_string += characters[distribution(generator)];
+    }
+    return random_string;
+}
+
 int main() {
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
+    std::string randomOrderId = generate_random_string(8);
 
     curl_global_init(CURL_GLOBAL_ALL);
 
@@ -40,7 +55,7 @@ int main() {
                             <web:Password>sverigetest</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
-                            <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                            <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                             <web:OrderRows>
                                 <web:OrderRow>
                                     <web:ArticleNumber>123</web:ArticleNumber>
@@ -86,6 +101,12 @@ int main() {
             </soap:Body>
         </soap:Envelope>
         )";
+
+        size_t pos = soapEnvelope.find("my_order_id");
+        if (pos != std::string::npos) {
+            // Replace the substring with random_numb
+            soapEnvelope.replace(pos, std::string("my_order_id").length(), randomOrderId);
+        }
 
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/soap+xml;charset=UTF-8");

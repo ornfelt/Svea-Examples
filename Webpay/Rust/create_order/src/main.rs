@@ -1,3 +1,4 @@
+use rand::{distributions::Alphanumeric, Rng};
 use reqwest;
 use std::error::Error;
 
@@ -7,8 +8,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let client = reqwest::Client::new();
     let url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
     let action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+    let random_order_id: String = rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(8)
+        .map(char::from)
+        .collect();
 
-    let soap_envelope = r#"
+    let soap_template = r#"
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <soap:Header/>
             <soap:Body>
@@ -20,7 +26,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                             <web:Password>sverigetest</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
-                            <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                            <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                             <web:OrderRows>
                                 <web:OrderRow>
                                     <web:ArticleNumber>123</web:ArticleNumber>
@@ -66,6 +72,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             </soap:Body>
     </soap:Envelope>
     "#;
+    let soap_envelope = soap_template.replace("my_order_id", &random_order_id);
 
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(reqwest::header::CONTENT_TYPE, "application/soap+xml;charset=UTF-8".parse()?);

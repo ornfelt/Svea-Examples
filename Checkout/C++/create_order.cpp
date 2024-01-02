@@ -33,9 +33,7 @@ std::string generate_random_string(size_t length) {
 // Main function to send request
 void send_request() {
     std::cout << "Running Create request for Checkout (C++)" << std::endl;
-
-    // Generating a random order ID
-    std::string random_order_id = generate_random_string(8);
+    std::string random_order_id = generate_random_string(15);
 
     // Read JSON payload from file
     std::string body_str;

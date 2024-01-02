@@ -41,7 +41,7 @@ class TestClass {
     }
 }
 
-echo "Running GET request for Checkout (PHP)\n";
+echo "Running GET request for Checkout (Php)\n";
 $testInstance = new TestClass();
 $myHeaders = $testInstance->get_request_headers(array('Content-Type' => 'application/json'));
 

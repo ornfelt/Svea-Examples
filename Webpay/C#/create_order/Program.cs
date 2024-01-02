@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Text;
+using System.Net;
 
 class Test
 {
@@ -9,8 +11,9 @@ class Test
         try
         {
             var client = new HttpClient();
-            string url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
-            string action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
+            var randomOrderId = GenerateRandomOrderId();
+            var url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
+            var action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
 
             string soapEnvelope = @"
     <soap:Envelope xmlns:soap=""http://www.w3.org/2003/05/soap-envelope"" xmlns:web=""https://webservices.sveaekonomi.se/webpay"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
@@ -24,7 +27,7 @@ class Test
                         <web:Password>sverigetest</web:Password>
                     </web:Auth>
                     <web:CreateOrderInformation>
-                        <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                        <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                         <web:OrderRows>
                             <web:OrderRow>
                                 <web:ArticleNumber>123</web:ArticleNumber>
@@ -70,6 +73,7 @@ class Test
         </soap:Body>
     </soap:Envelope>";
 
+            soapEnvelope = soapEnvelope.Replace("my_order_id", randomOrderId);
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/soap+xml;charset=UTF-8";
@@ -108,5 +112,16 @@ class Test
         {
             Console.WriteLine(e.Message);
         }
+    }
+
+    private static string GenerateRandomOrderId()
+    {
+        var random = new Random();
+        var orderId = new StringBuilder();
+        for (int i = 0; i < 8; i++)
+        {
+            orderId.Append(random.Next(0, 10)); // Append a random digit
+        }
+        return orderId.ToString();
     }
 }

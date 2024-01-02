@@ -12,7 +12,7 @@ class SveaAuth:
         print("Running Create request for Checkout (Python)")
         async with httpx.AsyncClient() as client:
             url = "https://checkoutapistage.svea.com/api/orders"
-            random_order_id = ''.join(random.choices('0123456789', k=8))
+            random_order_id = ''.join(random.choices('0123456789', k=15))
 
             #body = {
             #    "countryCode": "SE",

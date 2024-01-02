@@ -29,7 +29,7 @@ public class SveaAuth {
         String url = "https://checkoutapistage.svea.com/api/orders";
         Random random = new Random();
         StringBuilder randomOrderId = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 15; i++) {
             randomOrderId.append(random.nextInt(10));
         }
 

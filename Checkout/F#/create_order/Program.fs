@@ -11,7 +11,7 @@ open System.IO
 let generateRandomOrderId () =
     let random = Random()
     let orderId = StringBuilder()
-    for i in 0 .. 7 do
+    for i in 0 .. 14 do
         orderId.Append(random.Next(0, 10)) |> ignore
     orderId.ToString()
 

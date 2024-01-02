@@ -2,10 +2,10 @@
 
 class SveaAuth {
     public static function sendRequest() {
-        echo "Running Create request for Checkout (PHP)\n";
+        echo "Running Create request for Checkout (Php)\n";
 
         $url = "https://checkoutapistage.svea.com/api/orders";
-        $randomOrderId = substr(str_shuffle(str_repeat('0123456789', 8)), 0, 8);
+        $randomOrderId = substr(str_shuffle(str_repeat('0123456789', 15)), 0, 15);
 
         // Attempt to read the JSON payload from file
         $bodyStr = '';

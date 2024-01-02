@@ -7,7 +7,7 @@ class SveaAuth {
         console.log("Running Create request for Checkout (Javascript)");
 
         const url = "https://checkoutapistage.svea.com/api/orders";
-        const randomOrderId = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('');
+        const randomOrderId = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
 
         let body;
         try {

@@ -6,8 +6,9 @@ async function main() {
         "Content-Type": "application/soap+xml; charset=utf-8",
         "SOAPAction": action
     };
+    const randomOrderId = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('');
 
-    const soapEnvelope = `
+    const soapTemplate = `
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:web="https://webservices.sveaekonomi.se/webpay" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         <soap:Header/>
         <soap:Body>
@@ -19,7 +20,7 @@ async function main() {
                             <web:Password>sverigetest</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
-                            <web:ClientOrderNumber>MyTestingOrder123</web:ClientOrderNumber>
+                            <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>
                             <web:OrderRows>
                                 <web:OrderRow>
                                     <web:ArticleNumber>123</web:ArticleNumber>
@@ -66,6 +67,7 @@ async function main() {
     </soap:Envelope>
     `;
 
+    soapEnvelope = soapTemplate.replace("my_order_id", randomOrderId);
     try {
         const response = await fetch(url, {
             method: 'POST',
