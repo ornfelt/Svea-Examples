@@ -42,14 +42,14 @@ int main() {
                 <tem:GetOrders>
                     <tem:request>
                         <dat:Authentication>
-                            <dat:Password>sverigetest</dat:Password>
-                            <dat:Username>sverigetest</dat:Username>
+                            <dat:Password>WEBPAY_PASSWORD</dat:Password>
+                            <dat:Username>WEBPAY_PASSWORD</dat:Username>
                         </dat:Authentication>
                         <dat:OrdersToRetrieve>
                             <dat:GetOrderInformation>
-                                <dat:ClientId>79021</dat:ClientId>
+                                <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
                                 <dat:OrderType>Invoice</dat:OrderType>
-                                <dat:SveaOrderId>9731563</dat:SveaOrderId>
+                                <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
                             </dat:GetOrderInformation>
                         </dat:OrdersToRetrieve>
                     </tem:request>

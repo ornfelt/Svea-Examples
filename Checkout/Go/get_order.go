@@ -11,9 +11,9 @@ import (
 )
 
 const (
-	orderID     = "8906830"
-	merchantID  = "124842"
-	secretWord  = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW"
+	orderID     = "CHECKOUT_ORDER_TO_FETCH"
+	merchantID  = "CHECKOUT_MERCHANT_ID"
+	secretWord  = "CHECKOUT_SECRET_KEY"
 	//baseURL     = "https://paymentadminapistage.svea.com/api/v1/orders/"
     baseURL     = "https://checkoutapistage.svea.com/api/orders/"
 	contentType = "application/json"

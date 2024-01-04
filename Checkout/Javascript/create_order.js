@@ -49,8 +49,8 @@ class SveaAuth {
     }
 
     static createAuthenticationToken(requestMessage, timestamp) {
-        const merchantId = "124842";
-        const secretKey = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+        const merchantId = "CHECKOUT_MERCHANT_ID";
+        const secretKey = "CHECKOUT_SECRET_KEY";
         
         const hash = crypto.createHash('sha512');
         hash.update(requestMessage + secretKey + timestamp);

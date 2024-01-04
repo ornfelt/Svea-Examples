@@ -18,13 +18,13 @@
 class pg_request {
 public:
     void makeGetQueryTransactionIdRequest() {
-        int transactionId = 900497;
+        int transactionId = PG_ORDER_TO_FETCH;
         std::string messageXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><query><transactionid>" + std::to_string(transactionId) + "</transactionid></query>";
         std::string encodedMessage = base64Encode(reinterpret_cast<const unsigned char*>(messageXML.c_str()), messageXML.length());
-        std::string secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+        std::string secret = "PG_SECRET_KEY";
         std::string mac = getSha512Hash(encodedMessage + secret);
 
-        std::string postData = "merchantid=1200&message=" + encodedMessage + "&mac=" + mac;
+        std::string postData = "merchantid=PG_MERCHANT_ID&message=" + encodedMessage + "&mac=" + mac;
         performHttpRequest("https://webpaypaymentgatewaystage.svea.com/webpay/rest/querytransactionid", postData, false);
     }
 
@@ -36,12 +36,12 @@ public:
         std::string messageXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>" + std::to_string(randomRefNo) + "</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>";
 
         std::string encodedMessage = base64Encode(reinterpret_cast<const unsigned char*>(messageXML.c_str()), messageXML.length());
-        std::string secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+        std::string secret = "PG_SECRET_KEY";
         std::string mac = getSha512Hash(encodedMessage + secret);
         //std::cout << "Base64 Encoded Message (Post): " << encodedMessage << std::endl;
         //std::cout << "sha512 hashed message (Post): " << mac << std::endl;
 
-        std::string postData = "merchantid=1200&message=" + encodedMessage + "&mac=" + mac;
+        std::string postData = "merchantid=PG_MERCHANT_ID&message=" + encodedMessage + "&mac=" + mac;
         performHttpRequest("https://webpaypaymentgatewaystage.svea.com/webpay/payment", postData, true);
     }
 

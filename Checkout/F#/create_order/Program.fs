@@ -17,8 +17,8 @@ let generateRandomOrderId () =
 
 let createAuthenticationToken (requestMessage: string) (timestamp: string) =
     use sha512 = SHA512.Create()
-    let merchantId = "124842"
-    let secretKey = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW"
+    let merchantId = "CHECKOUT_MERCHANT_ID"
+    let secretKey = "CHECKOUT_SECRET_KEY"
     let hashBytes = sha512.ComputeHash(Encoding.UTF8.GetBytes(requestMessage + secretKey + timestamp))
     let hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower()
     Convert.ToBase64String(Encoding.UTF8.GetBytes(merchantId + ":" + hashString))

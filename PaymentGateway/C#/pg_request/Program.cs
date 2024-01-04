@@ -28,10 +28,10 @@ namespace TestRequests
 
         public static async Task MakeGetQueryTransactionIdRequestAsync()
         {
-            int transactionId = 900497;
+            int transactionId = PG_ORDER_TO_FETCH;
             string messageXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><query><transactionid>" + transactionId + "</transactionid></query>";
             string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(messageXML));
-            string secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+            string secret = "PG_SECRET_KEY";
             string mac = GetSha512Hash(encodedMessage + secret);
 
             //Console.WriteLine("mac: " + mac);
@@ -45,7 +45,7 @@ namespace TestRequests
 
                 var content = new FormUrlEncodedContent(new[]
                 {
-                    new KeyValuePair<string, string>("merchantid", "1200"),
+                    new KeyValuePair<string, string>("merchantid", "PG_MERCHANT_ID"),
                     new KeyValuePair<string, string>("message", encodedMessage),
                     new KeyValuePair<string, string>("mac", mac)
                 });
@@ -104,7 +104,7 @@ namespace TestRequests
                 </payment>";
 
             string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(messageXML));
-            string secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+            string secret = "PG_SECRET_KEY";
             string mac = GetSha512Hash(encodedMessage + secret);
 
             //Console.WriteLine("mac: " + mac);
@@ -117,7 +117,7 @@ namespace TestRequests
 
                 var content = new FormUrlEncodedContent(new[]
                 {
-                    new KeyValuePair<string, string>("merchantid", "1200"),
+                    new KeyValuePair<string, string>("merchantid", "PG_MERCHANT_ID"),
                     new KeyValuePair<string, string>("message", encodedMessage),
                     new KeyValuePair<string, string>("mac", mac)
                 });

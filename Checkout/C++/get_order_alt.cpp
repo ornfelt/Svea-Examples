@@ -47,8 +47,8 @@ class TestClass {
         }
 
     private:
-        const utility::string_t merchant_id = U("124842");
-        const utility::string_t secret_word = U("1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW");
+        const utility::string_t merchant_id = U("CHECKOUT_MERCHANT_ID");
+        const utility::string_t secret_word = U("CHECKOUT_SECRET_KEY");
 
         std::string sha512(const std::string& input) {
             unsigned char hash[SHA512_DIGEST_LENGTH];
@@ -94,7 +94,7 @@ int main() {
     web::http::http_headers my_headers = testInstance.get_request_headers();
     //web::http::http_headers my_headers = testInstance.get_request_headers({"Content-Type", "application/json"});
 
-    utility::string_t order_id = U("8906830");
+    utility::string_t order_id = U("CHECKOUT_ORDER_TO_FETCH");
     //utility::string_t url = U("https://checkoutapistage.svea.com/api/orders/") + order_id;
     utility::string_t url = U("https://paymentadminapistage.svea.com/api/v1/orders/") + order_id;
     web::http::http_request request(web::http::methods::GET);

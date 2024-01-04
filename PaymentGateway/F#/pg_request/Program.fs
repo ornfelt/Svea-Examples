@@ -19,15 +19,15 @@ let getSha512Hash (input: string) =
 let makeGetQueryTransactionIdRequestAsync () =
     async {
         try
-            let transactionId = 900497
+            let transactionId = PG_ORDER_TO_FETCH
             let messageXML = sprintf "<?xml version=\"1.0\" encoding=\"UTF-8\"?><query><transactionid>%d</transactionid></query>" transactionId
             let encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(messageXML))
-            let secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+            let secret = "PG_SECRET_KEY"
             let mac = getSha512Hash (encodedMessage + secret)
 
             let url = "https://webpaypaymentgatewaystage.svea.com/webpay/rest/querytransactionid"
             let content = new FormUrlEncodedContent(Seq.toArray [ // Use Seq.toArray to create an array
-                KeyValuePair("merchantid", "1200")
+                KeyValuePair("merchantid", "PG_MERCHANT_ID")
                 KeyValuePair("message", encodedMessage)
                 KeyValuePair("mac", mac)
             ])
@@ -79,14 +79,14 @@ let makePostRequestAsync () =
             //Console.WriteLine($"messageXML: {messageXML}")
 
             let encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(messageXML))
-            let secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+            let secret = "PG_SECRET_KEY"
             let mac = getSha512Hash(encodedMessage + secret)
             //Console.WriteLine($"encodedMessage: {encodedMessage}")
             //Console.WriteLine($"mac: {mac}")
 
             let url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment"
             let content = new FormUrlEncodedContent(Seq.toArray [ // Use Seq.toArray to create an array
-                KeyValuePair("merchantid", "1200")
+                KeyValuePair("merchantid", "PG_MERCHANT_ID")
                 KeyValuePair("message", encodedMessage)
                 KeyValuePair("mac", mac)
             ])

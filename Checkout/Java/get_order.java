@@ -14,9 +14,9 @@ import java.util.Map;
 
 public class get_order {
 
-    private static final String ORDER_ID = "8906830";
-    private static final String MERCHANT_ID = "124842";
-    private static final String SECRET_WORD = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW";
+    private static final String ORDER_ID = "CHECKOUT_ORDER_TO_FETCH";
+    private static final String MERCHANT_ID = "CHECKOUT_MERCHANT_ID";
+    private static final String SECRET_WORD = "CHECKOUT_SECRET_KEY";
     //private static final String BASE_URL = "https://paymentadminapistage.svea.com/api/v1/orders/";
     private static final String BASE_URL = "https://checkoutapistage.svea.com/api/orders/";
     private static final String CONTENT_TYPE = "application/json";

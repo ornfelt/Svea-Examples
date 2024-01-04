@@ -16,8 +16,8 @@ import (
 )
 
 const (
-    merchantID = "124842"
-    secretKey  = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW"
+    merchantID = "CHECKOUT_MERCHANT_ID"
+    secretKey  = "CHECKOUT_SECRET_KEY"
     url        = "https://checkoutapistage.svea.com/api/orders"
 )
 

@@ -19,15 +19,15 @@ Module Program
 
     Async Function MakeGetQueryTransactionIdRequestAsync() As Task
         Try
-            Dim transactionId As Integer = 900497
+            Dim transactionId As Integer = PG_ORDER_TO_FETCH
             Dim messageXML As String = $"<?xml version=""1.0"" encoding=""UTF-8""?><query><transactionid>{transactionId}</transactionid></query>"
             Dim encodedMessage As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(messageXML))
-            Dim secret As String = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+            Dim secret As String = "PG_SECRET_KEY"
             Dim mac As String = GetSha512Hash(encodedMessage + secret)
 
             Dim url As String = "https://webpaypaymentgatewaystage.svea.com/webpay/rest/querytransactionid"
             Dim content As New FormUrlEncodedContent(New Dictionary(Of String, String) From {
-                {"merchantid", "1200"},
+                {"merchantid", "PG_MERCHANT_ID"},
                 {"message", encodedMessage},
                 {"mac", mac}
             })
@@ -72,12 +72,12 @@ Module Program
                                       "</payment>"
 
             Dim encodedMessage As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(messageXML))
-            Dim secret As String = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+            Dim secret As String = "PG_SECRET_KEY"
             Dim mac As String = GetSha512Hash(encodedMessage + secret)
 
             Dim url As String = "https://webpaypaymentgatewaystage.svea.com/webpay/payment"
             Dim content As New FormUrlEncodedContent(New Dictionary(Of String, String) From {
-                {"merchantid", "1200"},
+                {"merchantid", "PG_MERCHANT_ID"},
                 {"message", encodedMessage},
                 {"mac", mac}
             })

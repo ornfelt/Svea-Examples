@@ -23,14 +23,14 @@ public class get_order {
                 "        <tem:GetOrders>\r\n" +
                 "            <tem:request>\r\n" +
                 "                <dat:Authentication>\r\n" +
-                "                    <dat:Password>sverigetest</dat:Password>\r\n" +
-                "                    <dat:Username>sverigetest</dat:Username>\r\n" +
+                "                    <dat:Password>WEBPAY_PASSWORD</dat:Password>\r\n" +
+                "                    <dat:Username>WEBPAY_PASSWORD</dat:Username>\r\n" +
                 "                </dat:Authentication>\r\n" +
                 "                <dat:OrdersToRetrieve>\r\n" +
                 "                    <dat:GetOrderInformation>\r\n" +
-                "                        <dat:ClientId>79021</dat:ClientId>\r\n" +
+                "                        <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>\r\n" +
                 "                        <dat:OrderType>Invoice</dat:OrderType>\r\n" +
-                "                        <dat:SveaOrderId>9731563</dat:SveaOrderId>\r\n" +
+                "                        <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>\r\n" +
                 "                    </dat:GetOrderInformation>\r\n" +
                 "                </dat:OrdersToRetrieve>\r\n" +
                 "            </tem:request>\r\n" +

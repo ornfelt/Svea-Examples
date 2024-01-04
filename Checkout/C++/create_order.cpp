@@ -62,8 +62,8 @@ void send_request() {
     web::http::client::http_client client(U("https://checkoutapistage.svea.com/api/orders"));
 
     SveaAuth sveaAuth;
-    sveaAuth.setMerchantId("124842");
-    sveaAuth.setSecretWord("1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW");
+    sveaAuth.setMerchantId("CHECKOUT_MERCHANT_ID");
+    sveaAuth.setSecretWord("CHECKOUT_SECRET_KEY");
 
     // Create request with headers
     web::http::http_request request = sveaAuth.get_request_headers(body_str);

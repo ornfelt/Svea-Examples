@@ -30,10 +30,10 @@ public class pg_request {
     }
 
     private static void makeGetQueryTransactionIdRequest() throws IOException, NoSuchAlgorithmException {
-        int transactionId = 900497;
+        int transactionId = PG_ORDER_TO_FETCH;
         String messageXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><query><transactionid>" + transactionId + "</transactionid></query>";
         String encodedMessage = Base64.getEncoder().encodeToString(messageXML.getBytes());
-        String secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+        String secret = "PG_SECRET_KEY";
         String mac = getSha512Hash(encodedMessage + secret);
 
         //System.out.println("mac: " + mac);
@@ -46,7 +46,7 @@ public class pg_request {
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setDoOutput(true);
 
-        String data = "merchantid=1200&message=" + URLEncoder.encode(encodedMessage, "UTF-8") + "&mac=" + URLEncoder.encode(mac, "UTF-8");
+        String data = "merchantid=PG_MERCHANT_ID&message=" + URLEncoder.encode(encodedMessage, "UTF-8") + "&mac=" + URLEncoder.encode(mac, "UTF-8");
 
         try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
             wr.writeBytes(data);
@@ -75,7 +75,7 @@ public class pg_request {
         int randomRefNo = new Random().nextInt(9000000) + 1000000;
         String messageXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>" + randomRefNo + "</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>";
         String encodedMessage = Base64.getEncoder().encodeToString(messageXML.getBytes());
-        String secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+        String secret = "PG_SECRET_KEY";
         String mac = getSha512Hash(encodedMessage + secret);
 
         //System.out.println("mac: " + mac);
@@ -88,7 +88,7 @@ public class pg_request {
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setDoOutput(true);
 
-        String data = "merchantid=1200&message=" + URLEncoder.encode(encodedMessage, "UTF-8") + "&mac=" + URLEncoder.encode(mac, "UTF-8");
+        String data = "merchantid=PG_MERCHANT_ID&message=" + URLEncoder.encode(encodedMessage, "UTF-8") + "&mac=" + URLEncoder.encode(mac, "UTF-8");
 
         try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
             wr.writeBytes(data);

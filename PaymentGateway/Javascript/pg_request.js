@@ -2,11 +2,11 @@ const crypto = require('crypto');
 
 class pg_request {
     constructor() {
-        this.secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+        this.secret = "PG_SECRET_KEY";
     }
 
     async makeGetQueryTransactionIdRequestAsync() {
-        const transactionId = 900497;
+        const transactionId = PG_ORDER_TO_FETCH;
         const messageXML = `<?xml version="1.0" encoding="UTF-8"?><query><transactionid>${transactionId}</transactionid></query>`;
         const encodedMessage = btoa(messageXML);
         const mac = this.getSha512Hash(encodedMessage + this.secret);
@@ -17,7 +17,7 @@ class pg_request {
         try {
             const url = "https://webpaypaymentgatewaystage.svea.com/webpay/rest/querytransactionid";
             const content = {
-                merchantid: "1200",
+                merchantid: "PG_MERCHANT_ID",
                 message: encodedMessage,
                 mac: mac
             };
@@ -49,7 +49,7 @@ class pg_request {
         try {
             const url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment";
             const content = {
-                merchantid: "1200",
+                merchantid: "PG_MERCHANT_ID",
                 message: encodedMessage,
                 mac: mac
             };

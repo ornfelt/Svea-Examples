@@ -5,9 +5,9 @@ Imports System.Text
 Imports System.Globalization
 
 Public Class TestClass
-    Private Const OrderId As String = "8906830"
-    Private Const MerchantId As String = "124842"
-    Private Const SecretWord As String = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW"
+    Private Const OrderId As String = "CHECKOUT_ORDER_TO_FETCH"
+    Private Const MerchantId As String = "CHECKOUT_MERCHANT_ID"
+    Private Const SecretWord As String = "CHECKOUT_SECRET_KEY"
 
     Public Function GetRequestHeaders(Optional requestBody As String = "", Optional extraHeaders As Dictionary(Of String, String) = Nothing) As Dictionary(Of String, String)
         Dim timestamp As String = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)

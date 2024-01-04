@@ -32,7 +32,7 @@ public:
         std::string message_xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>" + std::to_string(randomRefNo) + "</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>";
 
         std::string encoded_message = base64Encode(reinterpret_cast<const unsigned char*>(message_xml.c_str()), message_xml.length());
-        std::string secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+        std::string secret = "PG_SECRET_KEY";
         std::string mac = getSha512Hash(encoded_message + secret);
 
         //std::cout << "mac: " << mac << std::endl;
@@ -45,7 +45,7 @@ public:
             request.headers().set_content_type(U("application/x-www-form-urlencoded"));
 
             web::http::uri_builder builder;
-            builder.append_query(U("merchantid"), U("1200"));
+            builder.append_query(U("merchantid"), U("PG_MERCHANT_ID"));
             builder.append_query(U("message"), utility::conversions::to_string_t(encoded_message));
             builder.append_query(U("mac"), utility::conversions::to_string_t(mac));
 

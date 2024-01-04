@@ -19,14 +19,14 @@ Module Program
                                          "<tem:GetOrders>" & _
                                          "<tem:request>" & _
                                          "<dat:Authentication>" & _
-                                         "<dat:Password>sverigetest</dat:Password>" & _
-                                         "<dat:Username>sverigetest</dat:Username>" & _
+                                         "<dat:Password>WEBPAY_PASSWORD</dat:Password>" & _
+                                         "<dat:Username>WEBPAY_PASSWORD</dat:Username>" & _
                                          "</dat:Authentication>" & _
                                          "<dat:OrdersToRetrieve>" & _
                                          "<dat:GetOrderInformation>" & _
-                                         "<dat:ClientId>79021</dat:ClientId>" & _
+                                         "<dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>" & _
                                          "<dat:OrderType>Invoice</dat:OrderType>" & _
-                                         "<dat:SveaOrderId>9731563</dat:SveaOrderId>" & _
+                                         "<dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>" & _
                                          "</dat:GetOrderInformation>" & _
                                          "</dat:OrdersToRetrieve>" & _
                                          "</tem:request>" & _

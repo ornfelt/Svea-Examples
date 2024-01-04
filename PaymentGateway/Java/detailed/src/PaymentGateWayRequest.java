@@ -38,7 +38,7 @@ public class PaymentGateWayRequest {
 	        
 	        String encodedMessage = Base64.getEncoder().encodeToString(messageXML.getBytes());
 	        
-	        String secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+	        String secret = "PG_SECRET_KEY";
 	        
 	        String mac = get_SHA_512_SecurePassword((encodedMessage + secret), "");
 	        
@@ -49,7 +49,7 @@ public class PaymentGateWayRequest {
 				url = new URL("https://webpaypaymentgatewaystage.svea.com/webpay/payment");
 			
 				Map<String,Object> params = new LinkedHashMap<>();
-				params.put("merchantid", "1200");
+				params.put("merchantid", "PG_MERCHANT_ID");
 				params.put("message", encodedMessage);
 				params.put("mac", mac);
 

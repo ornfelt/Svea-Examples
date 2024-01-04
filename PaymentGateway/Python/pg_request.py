@@ -11,11 +11,11 @@ class pg_request:
         self._http_client = requests.Session()
 
     async def make_get_query_transaction_id_request_async(self):
-        transaction_id = 900497
+        transaction_id = PG_ORDER_TO_FETCH
         message_xml = f"""<?xml version="1.0" encoding="UTF-8"?><query><transactionid>{transaction_id}</transactionid></query>"""
 
         encoded_message = base64.b64encode(message_xml.encode('utf-8')).decode('utf-8')
-        secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+        secret = "PG_SECRET_KEY"
         mac = self.get_sha512_hash(encoded_message + secret)
 
         #print("mac:", mac)
@@ -24,7 +24,7 @@ class pg_request:
         try:
             url = "https://webpaypaymentgatewaystage.svea.com/webpay/rest/querytransactionid"
             content = {
-                "merchantid": "1200",
+                "merchantid": "PG_MERCHANT_ID",
                 "message": encoded_message,
                 "mac": mac
             }
@@ -59,7 +59,7 @@ class pg_request:
         message_xml = f"""<?xml version="1.0" encoding="UTF-8"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>{random_ref_no}</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>"""
 
         encoded_message = base64.b64encode(message_xml.encode('utf-8')).decode('utf-8')
-        secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+        secret = "PG_SECRET_KEY"
         mac = self.get_sha512_hash(encoded_message + secret)
 
         #print("mac:", mac)
@@ -68,7 +68,7 @@ class pg_request:
         try:
             url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment"
             content = {
-                "merchantid": "1200",
+                "merchantid": "PG_MERCHANT_ID",
                 "message": encoded_message,
                 "mac": mac
             }

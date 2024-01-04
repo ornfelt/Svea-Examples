@@ -19,9 +19,9 @@ Module Program
                                         "<web:CreateOrderEu>" & _
                                         "<web:request>" & _
                                         "<web:Auth>" & _
-                                        "<web:ClientNumber>79021</web:ClientNumber>" & _
-                                        "<web:Username>sverigetest</web:Username>" & _
-                                        "<web:Password>sverigetest</web:Password>" & _
+                                        "<web:ClientNumber>WEBPAY_CLIENT_ID</web:ClientNumber>" & _
+                                        "<web:Username>WEBPAY_PASSWORD</web:Username>" & _
+                                        "<web:Password>WEBPAY_PASSWORD</web:Password>" & _
                                         "</web:Auth>" & _
                                         "<web:CreateOrderInformation>" & _
                                         "<web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>" & _

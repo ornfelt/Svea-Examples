@@ -50,9 +50,9 @@ int main() {
                 <web:CreateOrderEu>
                     <web:request>
                         <web:Auth>
-                            <web:ClientNumber>79021</web:ClientNumber>
-                            <web:Username>sverigetest</web:Username>
-                            <web:Password>sverigetest</web:Password>
+                            <web:ClientNumber>WEBPAY_CLIENT_ID</web:ClientNumber>
+                            <web:Username>WEBPAY_PASSWORD</web:Username>
+                            <web:Password>WEBPAY_PASSWORD</web:Password>
                         </web:Auth>
                         <web:CreateOrderInformation>
                             <web:ClientOrderNumber>my_order_id</web:ClientOrderNumber>

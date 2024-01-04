@@ -71,8 +71,8 @@ Public Class SveaAuth
 
     Private Shared Function CreateAuthenticationToken(requestMessage As String, timestamp As String) As String
         Using sha512 As SHA512 = SHA512.Create()
-            Dim merchantId As String = "124842"
-            Dim secretKey As String = "1NDxpT2WQ4PW6Ud95rLWKD98xVr45Q8O9Vd52nomC7U9B18jp7lHCu7nsiTJO1NWXjSx26vE41jJ4rul7FUP1cGKXm4wakxt3iF7k63ayleb1xX9Di2wW46t9felsSPW"
+            Dim merchantId As String = "CHECKOUT_MERCHANT_ID"
+            Dim secretKey As String = "CHECKOUT_SECRET_KEY"
 
             Dim hashBytes As Byte() = sha512.ComputeHash(Encoding.UTF8.GetBytes(requestMessage & secretKey & timestamp))
             Dim hashString As String = BitConverter.ToString(hashBytes).Replace("-", "").ToLower()

@@ -18,10 +18,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 }
 
 async fn make_get_query_transaction_id_request() -> Result<(), Box<dyn Error>> {
-    let transaction_id = 900497;
+    let transaction_id = PG_ORDER_TO_FETCH;
     let message_xml = format!(r#"<?xml version="1.0" encoding="UTF-8"?><query><transactionid>{}</transactionid></query>"#, transaction_id);
     let encoded_message = encode(message_xml);
-    let secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+    let secret = "PG_SECRET_KEY";
     let mac = get_sha512_hash(&(encoded_message.clone() + secret));
 
     //println!("mac: {}", mac);
@@ -30,7 +30,7 @@ async fn make_get_query_transaction_id_request() -> Result<(), Box<dyn Error>> {
     let client = reqwest::Client::new();
     let url = "https://webpaypaymentgatewaystage.svea.com/webpay/rest/querytransactionid";
     let mut form = HashMap::new();
-    form.insert("merchantid", "1200");
+    form.insert("merchantid", "PG_MERCHANT_ID");
     form.insert("message", &encoded_message);
     form.insert("mac", &mac);
 
@@ -60,7 +60,7 @@ async fn make_post_request() -> Result<(), Box<dyn Error>> {
     let mut message_xml = String::new();
     write!(&mut message_xml, r#"<?xml version="1.0" encoding="UTF-8"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>{}</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>"#, random_ref_no).unwrap();
     let encoded_message = encode(message_xml);
-    let secret = "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d";
+    let secret = "PG_SECRET_KEY";
     let mac = get_sha512_hash(&(encoded_message.clone() + secret));
 
     //println!("mac: {}", mac);
@@ -69,7 +69,7 @@ async fn make_post_request() -> Result<(), Box<dyn Error>> {
     let client = reqwest::Client::new();
     let url = "https://webpaypaymentgatewaystage.svea.com/webpay/payment";
     let mut form = HashMap::new();
-    form.insert("merchantid", "1200");
+    form.insert("merchantid", "PG_MERCHANT_ID");
     form.insert("message", &encoded_message);
     form.insert("mac", &mac);
 

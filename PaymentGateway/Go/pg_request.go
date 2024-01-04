@@ -22,17 +22,17 @@ func main() {
 }
 
 func makeGetQueryTransactionIdRequest() {
-    transactionId := 900497
+    transactionId := PG_ORDER_TO_FETCH
     messageXML := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?><query><transactionid>%d</transactionid></query>`, transactionId)
     encodedMessage := base64.StdEncoding.EncodeToString([]byte(messageXML))
-    secret := "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+    secret := "PG_SECRET_KEY"
     mac := getSha512Hash(encodedMessage + secret)
 
     //fmt.Println("mac:", mac)
     //fmt.Println("encodedMessage:", encodedMessage)
 
     data := url.Values{}
-    data.Set("merchantid", "1200")
+    data.Set("merchantid", "PG_MERCHANT_ID")
     data.Set("message", encodedMessage)
     data.Set("mac", mac)
 
@@ -71,14 +71,14 @@ func makePostRequest() {
     randomRefNo := rand.Intn(9000000) + 1000000
     messageXML := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?><payment><paymentmethod>SVEACARDPAY</paymentmethod><currency>SEK</currency><amount>500</amount><vat>100</vat><customerrefno>%d</customerrefno><returnurl>https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl><lang>en</lang></payment>`, randomRefNo)
     encodedMessage := base64.StdEncoding.EncodeToString([]byte(messageXML))
-    secret := "27f18bfcbe4d7f39971cb3460fbe7234a82fb48f985cf22a068fa1a685fe7e6f93c7d0d92fee4e8fd7dc0c9f11e2507300e675220ee85679afa681407ee2416d"
+    secret := "PG_SECRET_KEY"
     mac := getSha512Hash(encodedMessage + secret)
 
     //fmt.Println("mac:", mac)
     //fmt.Println("encodedMessage:", encodedMessage)
 
     data := url.Values{}
-    data.Set("merchantid", "1200")
+    data.Set("merchantid", "PG_MERCHANT_ID")
     data.Set("message", encodedMessage)
     data.Set("mac", mac)
 
