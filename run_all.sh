@@ -160,6 +160,9 @@ compile_and_run_all() {
     compile_and_run_vb
 }
 
+./setup.sh
+#source setup.sh
+
 # Check arguments
 if [ $# -eq 0 ]; then
     # No arguments, run all languages
@@ -204,3 +207,5 @@ else
         esac
     done
 fi
+
+./setup.sh clean

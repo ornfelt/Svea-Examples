@@ -23,9 +23,15 @@ JS=node
 PHP=php
 CARGO=cargo # rustc can also be used
 
-.PHONY: all csharp cpp fsharp go java javascript php python rust vb
+.PHONY: all do-setup csharp cpp fsharp go java javascript php python rust vb do-cleanup
 
-all: csharp cpp fsharp go java javascript php python rust vb
+all: do-setup csharp cpp fsharp go java javascript php python rust vb do-cleanup
+
+do-setup:
+	@./setup.sh
+
+do-cleanup:
+	@./setup.sh clean
 
 csharp:
 	@$(CS_COMPILER) build > /dev/null "Checkout/C#/get_order/get_order.csproj" && $(CS_COMPILER) run --project "Checkout/C#/get_order/get_order.csproj"
