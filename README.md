@@ -1,6 +1,8 @@
 ## Description
 
-Some example code in different programming languages for authenticating towards Svea API's.
+This repo contains some example code in different programming languages for authenticating towards Svea APIs.
+
+You can either use any of the code provided in Checkout/Webpay/PaymentGateway directory and replace the credentials, or use the run_all bash script or Makefile to run all samples. **Make sure to set your credentials and some valid order IDs to be fetched in setup.sh first if you're running the script/makefile.**
 
 ## Basic Checkout Flowchart
 
