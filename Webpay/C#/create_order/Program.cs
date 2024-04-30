@@ -78,7 +78,6 @@ class Test
             request.Method = "POST";
             request.ContentType = "application/soap+xml;charset=UTF-8";
 
-            // Add the SOAPAction to the header if it's required by the server
             if (!string.IsNullOrEmpty(action))
             {
                 request.Headers.Add("SOAPAction", action);
@@ -118,9 +117,9 @@ class Test
     {
         var random = new Random();
         var orderId = new StringBuilder();
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 10; i++)
         {
-            orderId.Append(random.Next(0, 10)); // Append a random digit
+            orderId.Append(random.Next(0, 10));
         }
         return orderId.ToString();
     }

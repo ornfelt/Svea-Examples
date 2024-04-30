@@ -107,4 +107,4 @@ let main argv =
     let url = "https://webpaywsstage.svea.com/sveawebpay.asmx"
     let action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu"
     sendSoapRequest url action soapEnvelope |> Async.RunSynchronously
-    0 // Return an integer exit code
+    0

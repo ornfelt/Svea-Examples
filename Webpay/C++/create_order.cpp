@@ -104,7 +104,6 @@ int main() {
 
         size_t pos = soapEnvelope.find("my_order_id");
         if (pos != std::string::npos) {
-            // Replace the substring with random_numb
             soapEnvelope.replace(pos, std::string("my_order_id").length(), randomOrderId);
         }
 
