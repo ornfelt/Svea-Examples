@@ -233,3 +233,4 @@ PaymentGateway/C++/pg_request
 PaymentGateway/C++/pg
 Checkout/C++/get_order
 Checkout/C++/pa_get_order
+setup_local.sh
