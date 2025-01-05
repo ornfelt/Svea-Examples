@@ -28,12 +28,16 @@ CARGO=cargo # rustc can also be used
 all: do-setup csharp cpp fsharp go java javascript php python rust vb do-cleanup
 
 do-setup:
-	#@./setup.sh
-	@./setup_local.sh
+	@./setup.sh
 
 do-cleanup:
-	#@./setup.sh clean
-	@./setup_local.sh clean
+	@./setup.sh clean
+
+#do-setup:
+#	@./setup_local.sh
+#
+#do-cleanup:
+#	@./setup_local.sh clean
 
 csharp:
 	@cd "Checkout/C#/create_order" && $(CS_COMPILER) build > /dev/null && $(CS_COMPILER) run && cd - > /dev/null
