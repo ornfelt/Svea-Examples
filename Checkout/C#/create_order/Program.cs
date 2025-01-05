@@ -14,7 +14,6 @@ namespace Testing
         {
             Console.WriteLine("Running Create request for Checkout (C#)");
             await SendRequest();
-            Console.WriteLine("----------------------------------------------------------");
             //Console.ReadLine();
         }
 

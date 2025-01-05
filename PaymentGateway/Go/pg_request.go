@@ -18,7 +18,6 @@ func main() {
     makePostRequest()
     fmt.Println("Running GET request for PaymentGateway (Go)")
     makeGetQueryTransactionIdRequest()
-    fmt.Println("----------------------------------------------------------");
 }
 
 func makeGetQueryTransactionIdRequest() {

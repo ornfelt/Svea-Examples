@@ -88,19 +88,17 @@ async function main() {
             const sveaOrderIdMatch = responseText.match(/<SveaOrderId>(\d+)<\/SveaOrderId>/i);
             if (sveaOrderIdMatch && sveaOrderIdMatch[1]) {
                 const sveaOrderId = sveaOrderIdMatch[1];
-                console.log("SveaOrderId extracted:", sveaOrderId);
+                //console.log("SveaOrderId extracted:", sveaOrderId);
 
                 const filePath = './created_order_id.txt';
                 fs.writeFileSync(filePath, sveaOrderId, 'utf8');
-                console.log(`SveaOrderId saved to ${filePath}`);
+                //console.log(`SveaOrderId saved to ${filePath}`);
             } else {
                 console.log("Failed to extract SveaOrderId.");
             }
         } else {
             console.log("Failed...");
         }
-
-        console.log("----------------------------------------------------------");
     } catch (e) {
         console.error(e);
     }

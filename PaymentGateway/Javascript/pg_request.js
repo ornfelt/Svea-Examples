@@ -110,7 +110,6 @@ async function runRequests() {
     await tester.makePostRequestAsync();
     console.log("Running GET request for PaymentGateway (Javascript)");
     await tester.makeGetQueryTransactionIdRequestAsync();
-    console.log("----------------------------------------------------------");
 }
 
 runRequests().catch(console.error);

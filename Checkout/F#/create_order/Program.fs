@@ -71,7 +71,6 @@ let sendRequest () =
             extractAndSaveOrderId responseBody
         else
             printfn "Failed..."
-        printfn "----------------------------------------------------------"
     }
 
 [<EntryPoint>]

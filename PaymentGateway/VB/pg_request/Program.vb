@@ -102,6 +102,5 @@ Module Program
         MakePostRequestAsync().Wait()
         Console.WriteLine("Running GET request for PaymentGateway (VB.NET)")
         MakeGetQueryTransactionIdRequestAsync().Wait()
-        Console.WriteLine("----------------------------------------------------------")
     End Sub
 End Module

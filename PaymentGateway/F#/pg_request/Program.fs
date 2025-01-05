@@ -114,7 +114,6 @@ let main argv =
         do! makePostRequestAsync ()
         Console.WriteLine("Running GET request for PaymentGateway (F#)")
         do! makeGetQueryTransactionIdRequestAsync ()
-        Console.WriteLine("----------------------------------------------------------")
     } |> Async.RunSynchronously
     0
 

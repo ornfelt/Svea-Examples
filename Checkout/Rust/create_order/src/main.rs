@@ -74,8 +74,6 @@ impl SveaAuth {
         } else {
             println!("Failed...");
         }
-
-        println!("----------------------------------------------------------");
     }
 
     async fn set_http_request_headers(request_message: &str) -> reqwest::header::HeaderMap {

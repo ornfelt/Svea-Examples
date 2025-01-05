@@ -52,7 +52,6 @@ class SveaAuth {
         } catch (error) {
             console.error("Request failed:", error);
         }
-        console.log("----------------------------------------------------------");
     }
 
     static async setHttpRequestHeaders(operation, requestMessage) {

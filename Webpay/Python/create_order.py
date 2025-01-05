@@ -95,7 +95,6 @@ def main():
                 print("Failed to extract SveaOrderId.")
         else:
             print("Failed...")
-        print("----------------------------------------------------------")
         
     except Exception as e:
         print(e)

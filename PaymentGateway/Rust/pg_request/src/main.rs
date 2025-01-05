@@ -13,7 +13,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     make_post_request().await?;
     println!("Running GET request for PaymentGateway (Rust)");
     make_get_query_transaction_id_request().await?;
-    println!("----------------------------------------------------------");
     Ok(())
 }
 

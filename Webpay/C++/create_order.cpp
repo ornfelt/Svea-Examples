@@ -164,7 +164,6 @@ int main() {
 
         curl_slist_free_all(headers);
         curl_easy_cleanup(curl);
-        std::cout << "----------------------------------------------------------" << std::endl;
     }
 
     curl_global_cleanup();

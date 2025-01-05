@@ -117,7 +117,6 @@ class Test
                     Console.WriteLine("Failed...");
                 }
             }
-            Console.WriteLine("----------------------------------------------------------");
         }
         catch (Exception e)
         {

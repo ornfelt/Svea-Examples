@@ -26,7 +26,6 @@ public class pg_request {
         makePostRequest();
         System.out.println("Running GET request for PaymentGateway (Java)");
         makeGetQueryTransactionIdRequest();
-        System.out.println("----------------------------------------------------------");
     }
 
     private static void makeGetQueryTransactionIdRequest() throws IOException, NoSuchAlgorithmException {

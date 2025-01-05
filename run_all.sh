@@ -25,115 +25,115 @@ CARGO="cargo" # rustc can also be used
 compile_and_run_csharp() {
     #csexec="Checkout/C#/test" && $CS_COMPILER "Checkout/C#/get_order.cs" -out:$csexec && mono $csexec
 
-    cd "Checkout/C#/get_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
     cd "Checkout/C#/create_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
+    cd "Checkout/C#/get_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
 
     cd "PaymentGateway/C#/pg_request" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
 
-    cd "Webpay/C#/get_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
     cd "Webpay/C#/create_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
+    cd "Webpay/C#/get_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
 }
 
 compile_and_run_cpp() {
     CPPEXEC="Checkout/C++/test"
-    $CXX $CPPFLAGS Checkout/C++/get_order.cpp -o $CPPEXEC && $CPPEXEC
+    $CXX $CPPFLAGS Checkout/C++/create_order.cpp -o $CPPEXEC && $CPPEXEC
     CPPEXEC="test"
-    cd "Checkout/C++" && $CXX $CPPFLAGS create_order.cpp -o $CPPEXEC && ./$CPPEXEC && cd - > /dev/null
+    cd "Checkout/C++" && $CXX $CPPFLAGS get_order.cpp -o $CPPEXEC && ./$CPPEXEC && cd - > /dev/null
 
     CPPEXEC="PaymentGateway/C++/test"
-    $CXX $CPPFLAGS PaymentGateway/C++/pg_request.cpp -o $CPPEXEC && $CPPEXEC
     $CXX $CPPFLAGS PaymentGateway/C++/pg_create.cpp -o $CPPEXEC && $CPPEXEC
+    $CXX $CPPFLAGS PaymentGateway/C++/pg_request.cpp -o $CPPEXEC && $CPPEXEC
 
     CPPEXEC="Webpay/C++/test"
-    $CXX $CPPFLAGS Webpay/C++/get_order.cpp -o $CPPEXEC && $CPPEXEC
     $CXX $CPPFLAGS Webpay/C++/create_order.cpp -o $CPPEXEC && $CPPEXEC
+    $CXX $CPPFLAGS Webpay/C++/get_order.cpp -o $CPPEXEC && $CPPEXEC
 }
 
 compile_and_run_fsharp() {
     #F_EXEC="Checkout/F#/test.exe" && $FS_COMPILER "Checkout/F#/get_order.fs" -o $F_EXEC && mono $F_EXEC
 
-    cd "Checkout/F#/get_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
     cd "Checkout/F#/create_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
+    cd "Checkout/F#/get_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
 
     cd "PaymentGateway/F#/pg_request" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
 
-    cd "Webpay/F#/get_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
     cd "Webpay/F#/create_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
+    cd "Webpay/F#/get_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
 }
 
 compile_and_run_go() {
     GO_EXEC="Checkout/Go/test"
-    $GO_COMPILER build -o $GO_EXEC Checkout/Go/get_order.go 2>/dev/null && ./$GO_EXEC
-    cd "Checkout/Go" && $GO_COMPILER build -o $GO_EXEC create_order.go 2>/dev/null && ./$GO_EXEC && cd - > /dev/null
+    $GO_COMPILER build -o $GO_EXEC Checkout/Go/create_order.go 2>/dev/null && ./$GO_EXEC
+    cd "Checkout/Go" && $GO_COMPILER build -o $GO_EXEC get_order.go 2>/dev/null && ./$GO_EXEC && cd - > /dev/null
 
     GO_EXEC="PaymentGateway/Go/test"
     $GO_COMPILER build -o $GO_EXEC PaymentGateway/Go/pg_request.go 2>/dev/null && ./$GO_EXEC
 
     GO_EXEC="Webpay/Go/test"
-    $GO_COMPILER build -o $GO_EXEC Webpay/Go/get_order.go 2>/dev/null && ./$GO_EXEC
     $GO_COMPILER build -o $GO_EXEC Webpay/Go/create_order.go 2>/dev/null && ./$GO_EXEC
+    $GO_COMPILER build -o $GO_EXEC Webpay/Go/get_order.go 2>/dev/null && ./$GO_EXEC
 }
 
 compile_and_run_java() {
-    #java Checkout/Java/get_order.java 2>&1 | grep -v "warning"
-    java Checkout/Java/get_order.java
+    #java Checkout/Java/create_order.java 2>&1 | grep -v "warning"
+    java Checkout/Java/create_order.java
 
-    cd "Checkout/Java" && java create_order.java && cd - > /dev/null
+    cd "Checkout/Java" && java get_order.java && cd - > /dev/null
 
     java PaymentGateway/Java/pg_request.java
 
-    java Webpay/Java/get_order.java
     java Webpay/Java/create_order.java
+    java Webpay/Java/get_order.java
 }
 
 run_javascript() {
-    $JS Checkout/Javascript/get_order.js
-    cd "Checkout/Javascript" && $JS create_order.js && cd - > /dev/null
+    $JS Checkout/Javascript/create_order.js
+    cd "Checkout/Javascript" && $JS get_order.js && cd - > /dev/null
 
     $JS PaymentGateway/Javascript/pg_request.js
 
-    $JS Webpay/Javascript/get_order.js
     $JS Webpay/Javascript/create_order.js
+    $JS Webpay/Javascript/get_order.js
 }
 
 run_php() {
-    $PHP Checkout/Php/get_order.php
-    cd "Checkout/Php" && $PHP create_order.php && cd - > /dev/null
+    $PHP Checkout/Php/create_order.php
+    cd "Checkout/Php" && $PHP get_order.php && cd - > /dev/null
 
     $PHP PaymentGateway/Php/pg_request.php
 
-    $PHP Webpay/Php/get_order.php
     $PHP Webpay/Php/create_order.php
+    $PHP Webpay/Php/get_order.php
 }
 
 run_python() {
-    $PY Checkout/Python/get_order.py
-    cd "Checkout/Python" && $PY create_order.py && cd - > /dev/null
+    $PY Checkout/Python/create_order.py
+    cd "Checkout/Python" && $PY get_order.py && cd - > /dev/null
 
     $PY PaymentGateway/Python/pg_request.py
 
-    $PY Webpay/Python/get_order.py
     $PY Webpay/Python/create_order.py
+    $PY Webpay/Python/get_order.py
 }
 
 compile_and_run_rust() {
-    cd Checkout/Rust/get_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
     cd Checkout/Rust/create_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
+    cd Checkout/Rust/get_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
 
     cd PaymentGateway/Rust/pg_request && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
 
-    cd Webpay/Rust/get_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
     cd Webpay/Rust/create_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
+    cd Webpay/Rust/get_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
 }
 
 compile_and_run_vb() {
-    cd "Checkout/VB/get_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
     cd "Checkout/VB/create_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
+    cd "Checkout/VB/get_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
 
     cd "PaymentGateway/VB/pg_request" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
 
-    cd "Webpay/VB/get_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
     cd "Webpay/VB/create_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
+    cd "Webpay/VB/get_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
 }
 
 compile_and_run_all() {
@@ -149,8 +149,9 @@ compile_and_run_all() {
     compile_and_run_vb
 }
 
+#./setup.sh
+#source setup.sh
 ./setup_local.sh
-#source setup_local.sh
 
 # Check args
 if [ $# -eq 0 ]; then
@@ -196,5 +197,6 @@ else
     done
 fi
 
+#./setup.sh clean
 ./setup_local.sh clean
 

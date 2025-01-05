@@ -112,7 +112,6 @@ let sendSoapRequest (url: string) (action: string) (soapXml: string) =
                     Console.WriteLine("Failed to extract SveaOrderId.")
             else
                 Console.WriteLine("Failed...")
-            Console.WriteLine("----------------------------------------------------------")
         with
         | e -> Console.WriteLine(e.Message)
     }

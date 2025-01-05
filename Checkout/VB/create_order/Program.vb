@@ -19,7 +19,6 @@ Public Class SveaAuth
     Public Shared Async Function Main(args As String()) As Task
         Console.WriteLine("Running Create request for Checkout (VB.NET)")
         Await SendRequest()
-        Console.WriteLine("----------------------------------------------------------")
     End Function
 
     Private Shared Async Function SendRequest() As Task

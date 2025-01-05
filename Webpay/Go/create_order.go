@@ -130,7 +130,6 @@ func main() {
     } else {
         fmt.Println("Failed...")
     }
-    fmt.Println("----------------------------------------------------------");
 }
 
 func generateRandomString(length int) string {

@@ -109,7 +109,6 @@ class SveaAuth:
                     print("OrderId not found in the response.")
             else:
                 print("Failed...")
-        print("----------------------------------------------------------")
 
     @staticmethod
     async def set_http_request_headers(client, operation, request_message):

@@ -120,7 +120,6 @@ Module Program
         Catch e As Exception
             Console.WriteLine(e.Message)
         End Try
-        Console.WriteLine("----------------------------------------------------------")
     End Sub
 
     Private Function GenerateRandomOrderId() As String

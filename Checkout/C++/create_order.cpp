@@ -99,7 +99,6 @@ void send_request() {
         //    std::cout << "Response body: " << body << std::endl;
         //}).wait();
     }).wait();
-    std::cout << "----------------------------------------------------------" << std::endl;
 }
 
 int main() {

@@ -136,7 +136,6 @@ public class create_order {
                 }
             } else
                 System.out.println("Failed...");
-            System.out.println("----------------------------------------------------------");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -87,7 +87,6 @@ public class SveaAuth {
             } else {
                 System.out.println("Failed...");
             }
-            System.out.println("----------------------------------------------------------");
             return null;
         });
     }

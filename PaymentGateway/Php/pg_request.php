@@ -127,6 +127,5 @@ echo "Running Create request for PaymentGateway (Php)\n";
 $tester->makePostRequestAsync();
 echo "Running GET request for PaymentGateway (Php)\n";
 $tester->makeGetQueryTransactionIdRequestAsync();
-echo "----------------------------------------------------------\n";
 
 ?>

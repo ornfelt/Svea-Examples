@@ -119,7 +119,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     } else {
         println!("Failed...");
     }
-    println!("----------------------------------------------------------");
 
     Ok(())
 }

@@ -81,8 +81,6 @@ func sendRequest() {
     } else {
         fmt.Println("Failed...")
     }
-
-    fmt.Println("----------------------------------------------------------")
 }
 
 func extractOrderId(responseBody string) string {

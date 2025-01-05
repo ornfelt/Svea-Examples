@@ -109,6 +109,5 @@ int main() {
     pg_request tester;
     std::cout << "Running Create request for PaymentGateway (C++)" << std::endl;
     tester.make_post_request();
-    std::cout << "----------------------------------------------------------" << std::endl;
     return 0;
 }

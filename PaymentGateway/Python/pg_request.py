@@ -95,7 +95,6 @@ async def main():
     await tester.make_post_request_async()
     print("Running GET request for PaymentGateway (Python)")
     await tester.make_get_query_transaction_id_request_async()
-    print("----------------------------------------------------------")
 
 if __name__ == "__main__":
     asyncio.run(main())

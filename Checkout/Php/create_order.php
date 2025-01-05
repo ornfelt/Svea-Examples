@@ -43,7 +43,6 @@ class SveaAuth {
         } else {
             echo "Failed...\n";
         }
-        echo "----------------------------------------------------------\n";
     }
 
     public static function setHttpRequestHeaders($operation, $requestMessage) {

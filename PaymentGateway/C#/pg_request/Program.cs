@@ -19,7 +19,6 @@ namespace TestRequests
             await MakePostRequestAsync();
             Console.WriteLine("Running GET request for PaymentGateway (C#)");
             await MakeGetQueryTransactionIdRequestAsync();
-            Console.WriteLine("----------------------------------------------------------");
         }
 
         public static async Task MakeGetQueryTransactionIdRequestAsync()
