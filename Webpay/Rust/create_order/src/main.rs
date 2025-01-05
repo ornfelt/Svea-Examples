@@ -104,14 +104,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
         if let Some(captures) = svea_order_id_regex.captures(&response_body) {
             if let Some(order_id) = captures.get(1) {
                 let order_id = order_id.as_str();
-                println!("Extracted SveaOrderId: {}", order_id);
+                //println!("Extracted SveaOrderId: {}", order_id);
 
                 // Save the SveaOrderId to the file
                 let file_path = "../created_order_id.txt";
                 let mut file = File::create(file_path)?;
                 writeln!(file, "{}", order_id)?;
-
-                println!("SveaOrderId saved to {}", file_path);
+                //println!("SveaOrderId saved to {}", file_path);
             }
         } else {
             println!("SveaOrderId not found in the response.");

@@ -7,6 +7,7 @@ import json
 import random
 import re
 from pathlib import Path
+import pytz
 
 class SveaAuth:
     @staticmethod
@@ -113,7 +114,9 @@ class SveaAuth:
     @staticmethod
     async def set_http_request_headers(client, operation, request_message):
         client.timeout = 30
-        timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+
+        #timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        timestamp = datetime.now(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
         token = SveaAuth.create_authentication_token(request_message, timestamp)
         return {
             "Authorization": "Svea " + token,

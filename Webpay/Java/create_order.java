@@ -123,11 +123,11 @@ public class create_order {
 
                 if (matcher.find()) {
                     String sveaOrderId = matcher.group(1);
-                    System.out.println("SveaOrderId extracted: " + sveaOrderId);
+                    //System.out.println("SveaOrderId extracted: " + sveaOrderId);
 
                     try {
                         Files.write(Paths.get("./created_order_id.txt"), sveaOrderId.getBytes());
-                        System.out.println("SveaOrderId saved to ../created_order_id.txt");
+                        //System.out.println("SveaOrderId saved to ../created_order_id.txt");
                     } catch (Exception e) {
                         System.out.println("Failed to save SveaOrderId: " + e.getMessage());
                     }

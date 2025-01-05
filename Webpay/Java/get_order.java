@@ -43,8 +43,8 @@ public class get_order {
             String sveaOrderIdPath = "./created_order_id.txt";
             String sveaOrderId = new String(Files.readAllBytes(Paths.get(sveaOrderIdPath)), StandardCharsets.UTF_8).trim();
 
+            //System.out.println("Using SveaOrderId: " + sveaOrderId);
             soapEnvelope = soapEnvelope.replace("WEBPAY_ORDER_TO_FETCH_VALUE", sveaOrderId);
-            System.out.println("Using SveaOrderId: " + sveaOrderId);
 
             //URL obj = new URL(url);
             URL obj = URI.create(url).toURL();
