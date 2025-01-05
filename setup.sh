@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -f "./setup_local.sh" ]; then
+    echo "setup_local.sh found. Executing it and exiting setup.sh..."
+    # "$@" will pass args to the script...
+    ./setup_local.sh "$@"
+    exit 0
+fi
+
 # Credentials
 CHECKOUT_MERCHANT_ID_VALUE=""
 CHECKOUT_SECRET_KEY_VALUE=""

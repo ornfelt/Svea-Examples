@@ -116,12 +116,8 @@ compile_and_run_all() {
     compile_and_run_vb
 }
 
-if [ -f "./setup_local.sh" ]; then
-    ./setup_local.sh
-else
-    #source setup.sh
-    ./setup.sh
-fi
+#source setup.sh
+./setup.sh
 
 normalize_language() {
     case "${1,,}" in
@@ -188,9 +184,5 @@ else
     done
 fi
 
-if [ -f "./setup_local.sh" ]; then
-    ./setup_local.sh clean
-else
-    ./setup.sh clean
-fi
+./setup.sh clean
 

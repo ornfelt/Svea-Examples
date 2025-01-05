@@ -33,12 +33,6 @@ do-setup:
 do-cleanup:
 	@./setup.sh clean
 
-#do-setup:
-#	@./setup_local.sh
-#
-#do-cleanup:
-#	@./setup_local.sh clean
-
 csharp:
 	@cd "Checkout/C#/create_order" && $(CS_COMPILER) build > /dev/null && $(CS_COMPILER) run && cd - > /dev/null
 	@cd "Checkout/C#/get_order" && $(CS_COMPILER) build > /dev/null && $(CS_COMPILER) run && cd - > /dev/null
