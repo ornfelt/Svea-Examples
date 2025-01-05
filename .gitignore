@@ -235,10 +235,7 @@ Checkout/C++/get_order
 Checkout/C++/pa_get_order
 setup_local.sh
 
-Checkout/C++/test
+test
 Checkout/Go/Checkout/
-Checkout/Go/test
-PaymentGateway/Go/test
-Webpay/C++/test
-Webpay/Go/test
+created_order_id.txt
 

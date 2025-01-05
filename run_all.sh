@@ -35,10 +35,9 @@ compile_and_run_csharp() {
 }
 
 compile_and_run_cpp() {
-    CPPEXEC="Checkout/C++/test"
-    $CXX $CPPFLAGS Checkout/C++/create_order.cpp -o $CPPEXEC && $CPPEXEC
     CPPEXEC="test"
-    cd "Checkout/C++" && $CXX $CPPFLAGS get_order.cpp -o $CPPEXEC && ./$CPPEXEC && cd - > /dev/null
+    cd "Checkout/C++" && $CXX $CPPFLAGS create_order.cpp -o $CPPEXEC && ./$CPPEXEC
+    $CXX $CPPFLAGS get_order.cpp -o $CPPEXEC && ./$CPPEXEC && cd - > /dev/null
 
     CPPEXEC="PaymentGateway/C++/test"
     $CXX $CPPFLAGS PaymentGateway/C++/pg_create.cpp -o $CPPEXEC && $CPPEXEC
@@ -62,23 +61,23 @@ compile_and_run_fsharp() {
 }
 
 compile_and_run_go() {
-    GO_EXEC="Checkout/Go/test"
-    $GO_COMPILER build -o $GO_EXEC Checkout/Go/create_order.go 2>/dev/null && ./$GO_EXEC
-    cd "Checkout/Go" && $GO_COMPILER build -o $GO_EXEC get_order.go 2>/dev/null && ./$GO_EXEC && cd - > /dev/null
+    GO_EXEC="test"
+    cd "Checkout/Go" && $GO_COMPILER build -o $GO_EXEC create_order.go 2>/dev/null && ./$GO_EXEC
+    $GO_COMPILER build -o $GO_EXEC get_order.go 2>/dev/null && ./$GO_EXEC && cd - > /dev/null
 
     GO_EXEC="PaymentGateway/Go/test"
     $GO_COMPILER build -o $GO_EXEC PaymentGateway/Go/pg_request.go 2>/dev/null && ./$GO_EXEC
 
-    GO_EXEC="Webpay/Go/test"
-    $GO_COMPILER build -o $GO_EXEC Webpay/Go/create_order.go 2>/dev/null && ./$GO_EXEC
-    $GO_COMPILER build -o $GO_EXEC Webpay/Go/get_order.go 2>/dev/null && ./$GO_EXEC
+    GO_EXEC="test"
+    cd "Checkout/Go" && $GO_COMPILER build -o $GO_EXEC create_order.go 2>/dev/null && ./$GO_EXEC
+    $GO_COMPILER build -o $GO_EXEC get_order.go 2>/dev/null && ./$GO_EXEC && cd - > /dev/null
 }
 
 compile_and_run_java() {
-    #java Checkout/Java/create_order.java 2>&1 | grep -v "warning"
-    java Checkout/Java/create_order.java
+    #cd "Checkout/Java" && java create_order.java 2>&1 | grep -v "warning"
+    cd "Checkout/Java" && java create_order.java
 
-    cd "Checkout/Java" && java get_order.java && cd - > /dev/null
+    java get_order.java && cd - > /dev/null
 
     java PaymentGateway/Java/pg_request.java
 
