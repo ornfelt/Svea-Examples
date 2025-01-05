@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
-# Detecting OS
 OS=$(uname -s)
 if [[ "$OS" == "Linux" || "$OS" == "Darwin" ]]; then
-    # Unix-like environment
+    # unix-like
     CXX=g++
     CPPFLAGS="-w -std=c++17 -lcurl -lcpprest -lcrypto -lssl"
 else
-    # Windows environment
+    # Windows env
     CXX="g++"
     CPPFLAGS="-w -std=c++17 -LC:\path\to\OpenSSL\lib -LC:\path\to\cpprestsdk\lib -lcrypto -lssl -lcpprest -lcurl"
 fi
 
-# Common compiler / interpreters
+# compilers / interpreters
 CS_COMPILER="dotnet"
 FS_COMPILER="dotnet"
 VB_COMPILER="dotnet"
@@ -23,7 +22,6 @@ JS="node"
 PHP="php"
 CARGO="cargo" # rustc can also be used
 
-# Compile and run C#
 compile_and_run_csharp() {
     #csexec="Checkout/C#/test" && $CS_COMPILER "Checkout/C#/get_order.cs" -out:$csexec && mono $csexec
 
@@ -36,7 +34,6 @@ compile_and_run_csharp() {
     cd "Webpay/C#/create_order" && $CS_COMPILER build > /dev/null && $CS_COMPILER run && cd - > /dev/null
 }
 
-# Compile and run C++
 compile_and_run_cpp() {
     CPPEXEC="Checkout/C++/test"
     $CXX $CPPFLAGS Checkout/C++/get_order.cpp -o $CPPEXEC && $CPPEXEC
@@ -52,7 +49,6 @@ compile_and_run_cpp() {
     $CXX $CPPFLAGS Webpay/C++/create_order.cpp -o $CPPEXEC && $CPPEXEC
 }
 
-# Compile and run F#
 compile_and_run_fsharp() {
     #F_EXEC="Checkout/F#/test.exe" && $FS_COMPILER "Checkout/F#/get_order.fs" -o $F_EXEC && mono $F_EXEC
 
@@ -65,7 +61,6 @@ compile_and_run_fsharp() {
     cd "Webpay/F#/create_order" && $FS_COMPILER build > /dev/null && $FS_COMPILER run && cd - > /dev/null
 }
 
-# Compile and run Go
 compile_and_run_go() {
     GO_EXEC="Checkout/Go/test"
     $GO_COMPILER build -o $GO_EXEC Checkout/Go/get_order.go 2>/dev/null && ./$GO_EXEC
@@ -79,7 +74,6 @@ compile_and_run_go() {
     $GO_COMPILER build -o $GO_EXEC Webpay/Go/create_order.go 2>/dev/null && ./$GO_EXEC
 }
 
-# Compile and run Java
 compile_and_run_java() {
     #java Checkout/Java/get_order.java 2>&1 | grep -v "warning"
     java Checkout/Java/get_order.java
@@ -92,7 +86,6 @@ compile_and_run_java() {
     java Webpay/Java/create_order.java
 }
 
-# Run JavaScript
 run_javascript() {
     $JS Checkout/Javascript/get_order.js
     cd "Checkout/Javascript" && $JS create_order.js && cd - > /dev/null
@@ -103,7 +96,6 @@ run_javascript() {
     $JS Webpay/Javascript/create_order.js
 }
 
-# Run PHP
 run_php() {
     $PHP Checkout/Php/get_order.php
     cd "Checkout/Php" && $PHP create_order.php && cd - > /dev/null
@@ -114,7 +106,6 @@ run_php() {
     $PHP Webpay/Php/create_order.php
 }
 
-# Run Python
 run_python() {
     $PY Checkout/Python/get_order.py
     cd "Checkout/Python" && $PY create_order.py && cd - > /dev/null
@@ -125,7 +116,6 @@ run_python() {
     $PY Webpay/Python/create_order.py
 }
 
-# Compile and run Rust
 compile_and_run_rust() {
     cd Checkout/Rust/get_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
     cd Checkout/Rust/create_order && RUSTFLAGS="-A warnings" $CARGO build 2> /dev/null && RUSTFLAGS="-A warnings" $CARGO run 2> /dev/null && cd - > /dev/null
@@ -146,7 +136,6 @@ compile_and_run_vb() {
     cd "Webpay/VB/create_order" && $VB_COMPILER build > /dev/null && $VB_COMPILER run && cd - > /dev/null
 }
 
-# Running all
 compile_and_run_all() {
     compile_and_run_csharp
     compile_and_run_cpp
@@ -160,15 +149,14 @@ compile_and_run_all() {
     compile_and_run_vb
 }
 
-./setup.sh
-#source setup.sh
+./setup_local.sh
+#source setup_local.sh
 
-# Check arguments
+# Check args
 if [ $# -eq 0 ]; then
-    # No arguments, run all languages
+    # No arguments, run all
     compile_and_run_all
 else
-    # Loop through arguments and run the selected language(s)
     for lang in "$@"; do
         case $lang in
             csharp)
@@ -208,4 +196,5 @@ else
     done
 fi
 
-./setup.sh clean
+./setup_local.sh clean
+

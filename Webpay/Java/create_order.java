@@ -1,11 +1,14 @@
 import java.io.OutputStream;
-import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URI;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class create_order {
 
@@ -111,9 +114,27 @@ public class create_order {
 
             //System.out.println("Response:");
             //System.out.println(response.toString());
-            if (responseCode == 200 && response.toString().toLowerCase().contains("accepted>true"))
+            if (responseCode == 200 && response.toString().toLowerCase().contains("accepted>true")) {
                 System.out.println("Success!");
-            else
+
+                String responseString = response.toString();
+                Pattern sveaOrderIdPattern = Pattern.compile("<(?:\\w+:)?SveaOrderId>(\\d+)</(?:\\w+:)?SveaOrderId>", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = sveaOrderIdPattern.matcher(responseString);
+
+                if (matcher.find()) {
+                    String sveaOrderId = matcher.group(1);
+                    System.out.println("SveaOrderId extracted: " + sveaOrderId);
+
+                    try {
+                        Files.write(Paths.get("./created_order_id.txt"), sveaOrderId.getBytes());
+                        System.out.println("SveaOrderId saved to ../created_order_id.txt");
+                    } catch (Exception e) {
+                        System.out.println("Failed to save SveaOrderId: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("Failed to extract SveaOrderId.");
+                }
+            } else
                 System.out.println("Failed...");
             System.out.println("----------------------------------------------------------");
         } catch (Exception e) {

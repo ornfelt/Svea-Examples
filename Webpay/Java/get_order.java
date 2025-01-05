@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class get_order {
 	
@@ -30,13 +32,19 @@ public class get_order {
                 "                    <dat:GetOrderInformation>\r\n" +
                 "                        <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>\r\n" +
                 "                        <dat:OrderType>Invoice</dat:OrderType>\r\n" +
-                "                        <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>\r\n" +
+                "                        <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>\r\n" +
                 "                    </dat:GetOrderInformation>\r\n" +
                 "                </dat:OrdersToRetrieve>\r\n" +
                 "            </tem:request>\r\n" +
                 "        </tem:GetOrders>\r\n" +
                 "    </soap:Body>\r\n" +
                 "</soap:Envelope>";
+
+            String sveaOrderIdPath = "./created_order_id.txt";
+            String sveaOrderId = new String(Files.readAllBytes(Paths.get(sveaOrderIdPath)), StandardCharsets.UTF_8).trim();
+
+            soapEnvelope = soapEnvelope.replace("WEBPAY_ORDER_TO_FETCH_VALUE", sveaOrderId);
+            System.out.println("Using SveaOrderId: " + sveaOrderId);
 
             //URL obj = new URL(url);
             URL obj = URI.create(url).toURL();

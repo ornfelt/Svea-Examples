@@ -1,10 +1,9 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Net;
+using System.Text.RegularExpressions;
 
 class Test
 {
-
     static void Main()
     {
         Console.WriteLine("Running Create request for Webpay (C#)");
@@ -99,6 +98,19 @@ class Test
                 if ((int)response.StatusCode == 200 && responseContent.ToLower().Contains("accepted>true"))
                 {
                     Console.WriteLine("Success!");
+
+                    var sveaOrderId = ExtractSveaOrderId(responseContent);
+                    if (!string.IsNullOrEmpty(sveaOrderId))
+                    {
+                        //Console.WriteLine($"SveaOrderId: {sveaOrderId}");
+                        var filePath = Path.Combine("..", "created_order_id.txt");
+                        File.WriteAllText(filePath, sveaOrderId);
+                        //Console.WriteLine($"SveaOrderId saved to {filePath}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to extract SveaOrderId.");
+                    }
                 }
                 else
                 {
@@ -122,5 +134,19 @@ class Test
             orderId.Append(random.Next(0, 10));
         }
         return orderId.ToString();
+    }
+
+    private static string ExtractSveaOrderId(string responseContent)
+    {
+        try
+        {
+            var match = Regex.Match(responseContent, @"<SveaOrderId>(\d+)</SveaOrderId>");
+            return match.Success ? match.Groups[1].Value : null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error extracting SveaOrderId: {ex.Message}");
+            return null;
+        }
     }
 }

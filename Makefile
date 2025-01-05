@@ -12,7 +12,7 @@ else
     CPPFLAGS=-w -std=c++17 -lcurl -lcpprest -lcrypto -lssl
 endif
 
-# Common compiler / interpreters
+# compilers / interpreters
 CS_COMPILER=dotnet
 FS_COMPILER=dotnet
 VB_COMPILER=dotnet

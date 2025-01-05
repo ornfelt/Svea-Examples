@@ -1,9 +1,5 @@
-﻿using System;
-using System.Net.Http;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
 
 namespace TestRequests
@@ -19,10 +15,10 @@ namespace TestRequests
 
         public static async Task Main(string[] args)
         {
-            Console.WriteLine("Running GET request for PaymentGateway (C#)");
-            await MakeGetQueryTransactionIdRequestAsync();
             Console.WriteLine("Running Create request for PaymentGateway (C#)");
             await MakePostRequestAsync();
+            Console.WriteLine("Running GET request for PaymentGateway (C#)");
+            await MakeGetQueryTransactionIdRequestAsync();
             Console.WriteLine("----------------------------------------------------------");
         }
 

@@ -2,8 +2,29 @@
 open System.Net.Http
 open System.Security.Cryptography
 open System.Text
+open System.IO
 
-let orderId = "CHECKOUT_ORDER_TO_FETCH"
+let readOrderIdFromFile filePath =
+    try
+        if File.Exists(filePath) then
+            File.ReadAllText(filePath).Trim()
+        else
+            failwithf "File not found: %s" filePath
+    with
+    | ex -> 
+        printfn "Error reading OrderId from file: %s" ex.Message
+        ""
+
+let orderId =
+    let filePath = "../created_order_id.txt"
+    let orderIdFromFile = readOrderIdFromFile filePath
+    if orderIdFromFile = "" then
+        failwith "OrderId could not be read from file."
+    else
+        orderIdFromFile
+
+//printfn "Using OrderId: %s" orderId
+
 let merchantId = "CHECKOUT_MERCHANT_ID"
 let secretWord = "CHECKOUT_SECRET_KEY"
 //let baseUrl = "https://paymentadminapistage.svea.com/api/v1/orders/"

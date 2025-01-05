@@ -1,9 +1,6 @@
-﻿using System;
-using System.Globalization;
-using System.Net.Http;
+﻿using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SveaAuthentication
 {
@@ -14,7 +11,19 @@ namespace SveaAuthentication
             Console.WriteLine("Running GET request for Checkout (C#)");
             var testInstance = new TestClass();
             var myHeaders = testInstance.GetRequestHeaders();
-            string orderId = "CHECKOUT_ORDER_TO_FETCH";
+            string orderId = "";
+            string filePath = "../created_order_id.txt";
+            if (File.Exists(filePath))
+            {
+                orderId = File.ReadAllText(filePath).Trim();
+                //Console.WriteLine($"Using OrderId: {orderId}");
+            }
+            else
+            {
+                Console.WriteLine($"File {filePath} not found. Using default OrderId: {orderId}");
+            }
+
+            // Could also use PA api if order is finalized
             //string url = "https://paymentadminapistage.svea.com/api/v1/orders/" + orderId;
             string url = "https://checkoutapistage.svea.com/api/orders/" + orderId;
 

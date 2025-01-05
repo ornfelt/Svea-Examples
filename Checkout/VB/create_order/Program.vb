@@ -42,6 +42,21 @@ Public Class SveaAuth
         If response.StatusCode = Net.HttpStatusCode.OK OrElse 
            response.StatusCode = Net.HttpStatusCode.Created Then
             Console.WriteLine("Success!")
+
+            Dim orderIdRegex As New Text.RegularExpressions.Regex("""OrderId"":\s*(\d+)", Text.RegularExpressions.RegexOptions.IgnoreCase)
+            Dim match As Text.RegularExpressions.Match = orderIdRegex.Match(responseBody)
+
+            If match.Success Then
+                Dim orderId As String = match.Groups(1).Value
+                Try
+                    Await File.WriteAllTextAsync("../created_order_id.txt", orderId)
+                    'Console.WriteLine("OrderId saved to ../created_order_id.txt: " & orderId)
+                    Catch ex As Exception
+                    Console.WriteLine("Error saving OrderId to file: " & ex.Message)
+                End Try
+            Else
+                Console.WriteLine("OrderId not found in the response.")
+            End If
         Else
             Console.WriteLine("Failed...")
         End If
@@ -80,3 +95,4 @@ Public Class SveaAuth
         End Using
     End Function
 End Class
+

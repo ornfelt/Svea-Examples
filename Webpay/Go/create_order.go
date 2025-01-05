@@ -8,6 +8,8 @@ import (
     "net/http"
     "strings"
     "time"
+    "os"
+    "regexp"
 )
 
 func main() {
@@ -107,6 +109,24 @@ func main() {
 
     if resp.StatusCode == 200 && strings.Contains(strings.ToLower(string(body)), "accepted>true") {
         fmt.Println("Success!")
+
+        orderIdRegex := regexp.MustCompile(`<SveaOrderId>(\d+)</SveaOrderId>`)
+        match := orderIdRegex.FindStringSubmatch(string(body))
+
+        if match != nil {
+            sveaOrderId := match[1]
+            //fmt.Println("SveaOrderId extracted:", sveaOrderId)
+
+            orderIdFilePath := "./created_order_id.txt"
+            err := os.WriteFile(orderIdFilePath, []byte(sveaOrderId), 0644)
+            if err != nil {
+                fmt.Println("Error saving order ID to file:", err)
+            } else {
+                //fmt.Println("Order ID saved to:", orderIdFilePath)
+            }
+        } else {
+            fmt.Println("Failed to extract SveaOrderId.")
+        }
     } else {
         fmt.Println("Failed...")
     }

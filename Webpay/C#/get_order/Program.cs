@@ -35,6 +35,23 @@ class Test
                     </soap:Body>
                 </soap:Envelope>";
 
+            var filePath = Path.Combine("..", "created_order_id.txt");
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"Error: Order ID file not found at {filePath}");
+                return;
+            }
+
+            string sveaOrderId = File.ReadAllText(filePath).Trim();
+            if (string.IsNullOrEmpty(sveaOrderId))
+            {
+                Console.WriteLine("Error: Order ID is empty.");
+                return;
+            }
+
+            //Console.WriteLine($"Using SveaOrderId: {sveaOrderId}");
+            soapEnvelope = soapEnvelope.Replace("WEBPAY_ORDER_TO_FETCH", sveaOrderId); 
+
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/soap+xml;charset=UTF-8";
@@ -67,7 +84,7 @@ class Test
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"Error: {e.Message}");
         }
     }
 }

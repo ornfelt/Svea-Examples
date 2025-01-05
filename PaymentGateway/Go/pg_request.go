@@ -14,10 +14,10 @@ import (
 
 func main() {
     rand.Seed(time.Now().UnixNano())
-    fmt.Println("Running GET request for PaymentGateway (Go)")
-    makeGetQueryTransactionIdRequest()
     fmt.Println("Running Create request for PaymentGateway (Go)")
     makePostRequest()
+    fmt.Println("Running GET request for PaymentGateway (Go)")
+    makeGetQueryTransactionIdRequest()
     fmt.Println("----------------------------------------------------------");
 }
 

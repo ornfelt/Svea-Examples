@@ -22,7 +22,7 @@ $soapEnvelope = <<<EOT
                     <dat:GetOrderInformation>
                         <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
                         <dat:OrderType>Invoice</dat:OrderType>
-                        <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
+                        <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>
                     </dat:GetOrderInformation>
                 </dat:OrdersToRetrieve>
             </tem:request>
@@ -30,6 +30,21 @@ $soapEnvelope = <<<EOT
     </soap:Body>
 </soap:Envelope>
 EOT;
+
+$orderIdFile = './created_order_id.txt';
+if (!file_exists($orderIdFile)) {
+    echo "Error: Order ID file not found: $orderIdFile\n";
+    exit(1);
+}
+
+$sveaOrderId = trim(file_get_contents($orderIdFile));
+if (empty($sveaOrderId)) {
+    echo "Error: Order ID file is empty.\n";
+    exit(1);
+}
+
+//echo "Using SveaOrderId: $sveaOrderId\n";
+$soapEnvelope = str_replace('WEBPAY_ORDER_TO_FETCH_VALUE', $sveaOrderId, $soapEnvelope);
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(

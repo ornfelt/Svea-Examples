@@ -13,10 +13,10 @@
 #include <ctime>
 #include <string>
 #include <random>
+#include <regex>
 
 #include "SveaAuth.h"
 
-// Helper function to generate a random order_id
 std::string generate_random_string(size_t length) {
     const std::string characters = "0123456789";
     std::random_device random_device;
@@ -30,12 +30,10 @@ std::string generate_random_string(size_t length) {
     return random_string;
 }
 
-// Main function to send request
 void send_request() {
     std::cout << "Running Create request for Checkout (C++)" << std::endl;
     std::string random_order_id = generate_random_string(15);
 
-    // Read JSON payload from file
     std::string body_str;
     try {
         std::ifstream file("create_order_payload.json");
@@ -47,7 +45,6 @@ void send_request() {
         buffer << file.rdbuf();
         body_str = buffer.str();
 
-        // Replace placeholder with the random order ID
         size_t pos = body_str.find("my_order_id");
         if (pos != std::string::npos) {
             body_str.replace(pos, std::string("my_order_id").length(), random_order_id);
@@ -58,30 +55,49 @@ void send_request() {
         return;
     }
 
-    // Create HTTP client
     web::http::client::http_client client(U("https://checkoutapistage.svea.com/api/orders"));
 
     SveaAuth sveaAuth;
     sveaAuth.setMerchantId("CHECKOUT_MERCHANT_ID");
     sveaAuth.setSecretWord("CHECKOUT_SECRET_KEY");
 
-    // Create request with headers
     web::http::http_request request = sveaAuth.get_request_headers(body_str);
     request.set_method(web::http::methods::POST);
     request.set_body(body_str);
 
-    // Send the request asynchronously
     client.request(request).then([](web::http::http_response response) {
         if (response.status_code() == 200 || response.status_code() == 201) {
             std::cout << "Success!" << std::endl;
+            response.extract_string().then([](std::string body) {
+                //std::cout << "Response body: " << body << std::endl;
+
+                std::regex orderIdRegex(R"("OrderId":\s*(\d+))", std::regex_constants::icase);
+                std::smatch match;
+                if (std::regex_search(body, match, orderIdRegex) && match.size() > 1) {
+                    std::string orderId = match[1].str();
+                    //std::cout << "Extracted OrderId: " << orderId << std::endl;
+
+                    std::ofstream outFile("./created_order_id.txt");
+                    if (outFile.is_open()) {
+                        outFile << orderId;
+                        outFile.close();
+                        //std::cout << "OrderId saved to ../created_order_id.txt" << std::endl;
+                    } else {
+                        std::cerr << "Failed to open file for writing OrderId." << std::endl;
+                    }
+                } else {
+                    std::cerr << "OrderId not found in response body." << std::endl;
+                }
+            }).wait();
+
         } else {
             std::cout << "Failed..." << std::endl;
         }
 
-         //std::cout << "Response: " << response.to_string() << std::endl;
-         //response.extract_string().then([](std::string body) {
-         //    std::cout << "Response body: " << body << std::endl;
-         //}).wait();
+        //std::cout << "Response: " << response.to_string() << std::endl;
+        //response.extract_string().then([](std::string body) {
+        //    std::cout << "Response body: " << body << std::endl;
+        //}).wait();
     }).wait();
     std::cout << "----------------------------------------------------------" << std::endl;
 }
@@ -90,3 +106,4 @@ int main() {
     send_request();
     return 0;
 }
+

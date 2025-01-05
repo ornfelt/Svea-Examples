@@ -106,11 +106,12 @@ class pg_request {
 // Usage
 async function runRequests() {
     const tester = new pg_request();
-    console.log("Running GET request for PaymentGateway (Javascript)");
-    await tester.makeGetQueryTransactionIdRequestAsync();
     console.log("Running Create request for PaymentGateway (Javascript)");
     await tester.makePostRequestAsync();
+    console.log("Running GET request for PaymentGateway (Javascript)");
+    await tester.makeGetQueryTransactionIdRequestAsync();
     console.log("----------------------------------------------------------");
 }
 
 runRequests().catch(console.error);
+

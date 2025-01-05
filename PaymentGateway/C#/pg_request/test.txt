@@ -1,0 +1,191 @@
+Running Create request for PaymentGateway (C#)
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Svea Card Payment Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; font-src 'self' data:;">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/SveaCardPay.Mvc.Stage/Content/newhope.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <form class="form-horizontal" action="/SveaCardPay.Mvc.Stage/Payment/Submit" role="form" id="cardform" autocomplete="off" method="POST" novalidate="novalidate">
+            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8PyUB1uT1HhNvM4nKipdEryW4Mpu_dWu54jO94KpQoKSa-ZaBCuttTh79iojjGTIpQLA-B9Zv7xmOR5JTKVvNz0ihm2K6mxkDym6iUb8kMH0IyomZ7pb_sXQ5t95wFweDMqLFcYH6qcSU_TTfQiEOTw" />
+            <div>
+                <div class="col-sm-6 col-sm-offset-3 card">
+                    <div class="row card-selector">
+                        <div class="col-sm-12">
+                            <h1>Enter your card details</h1>
+                                    <label class="radio-fancy">
+                                        <input type="radio" name="DebCredType" id="DebCredTypeDebit" checked value="debit" required data-val="true"
+                                               data-val-checked="Please select card type" data-val-required="Please select card type" />
+                                        <span>Debit card</span>
+                                    </label>
+                                    <label class="radio-fancy">
+                                        <input type="radio" name="DebCredType" id="DebCredTypeCredit" value="credit" required data-val="true"
+                                               data-val-checked="Please select card type" data-val-required="Please select card type" />
+                                        <span>Credit card</span>
+                                    </label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="CardTypeGroup">
+                        <div class="col-sm-6 hidden">
+                            <label class="radio-inline">
+                                <input type="radio" name="CardType" id="CardTypeVisa" value="visa" required> Visa
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="CardType" id="CardTypeMasterCard" value="mastercard" required> Mastercard
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="CardType" id="CardTypeAmex" value="amex" required> American Express
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="CardType" id="CardTypeDiners" value="diners" required> Diners Club
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row"></div>
+
+                        <div class="form-group form-group-lg mb-4">
+                            <div class="col-sm-12">
+                                <input autofocus="True" class="form-control rounded-top listener" data-val="true" data-val-length="Name cannot exceed 100 characters." data-val-length-max="100" data-val-required="Enter the card holder name." id="CardHolderName" maxlength="100" name="CardHolderName" placeholder="" tabindex="1" title="Name" type="text" value="" />
+                                <span class="placeholder placeholder-small" id="CardHolderNamePlaceHolder">First and last name</span>
+                                <div class="err-msg-block">
+                                    <span data-valmsg-for="CardHolderName" data-valmsg-replace="true" role="alert"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-lg mt-8">
+                            <div class="col-sm-12">
+                                <input class="form-control listener" data-typeval="Cannot determine card type. Is the card number entered correctly?" data-val="true" data-val-cardsupported="This type of card isn&#x27;t supported" data-val-creditcardluhn="Please check the card number" data-val-required="Please enter your card number" id="CardNumber" name="CardNumber" pattern="\d*" placeholder="" tabindex="2" title="Card number" type="text" value="" />
+                                <span class="placeholder placeholder-down" id="CardNumberPlaceHolder">Card number</span>
+                                <div class="err-msg-block">
+                                    <span data-valmsg-for="CardNumber" data-valmsg-replace="true" role="alert"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+
+                    <div class="form-group form-group-lg mt-8">
+                        <div class="col-sm-12">
+                            <div class="col-xs-6 left-panel" id="ExpirationDateDiv">
+                                <input class="form-control listener" data-val="true" data-val-expirydate="Card has expired" data-val-expirydate-expdate="expdate" data-val-regex="Please check the expiry date" data-val-regex-pattern="^(0[1-9]|1[0-2])/\d{2}$" id="expdate" maxlength="5" name="expdate" pattern="\d*" placeholder="" tabindex="3" title="Expiry date" type="text" value="" />
+                                <input class="form-control" data-val="true" data-val-range="Enter the month between 1 and 12." data-val-range-max="12" data-val-range-min="1" data-val-required="Enter the expiry month of the card." id="month" name="month" placeholder="" type="hidden" value="" />
+                                <input class="form-control" data-val="true" data-val-expirationdateinfuture="Card has expired" data-val-expirationdateinfuture-year="year" data-val-range="Year must be a number between 0 and 99." data-val-range-max="99" data-val-range-min="0" data-val-required="Enter the expiry year of the card." id="year" name="year" placeholder="" type="hidden" value="" />
+                                <input id="ExpirationPlaceHolder" name="ExpirationPlaceHolder" type="hidden" value="MM/YY" />
+                                <span class="placeholder placeholder-down" id="ExpirationDatePlaceholder">Expiry date</span>
+                                <span class="popovertrigger questionMarkPopover">
+                                    <img src="/SveaCardPay.Mvc.Stage/Content/images/info-icon.svg" alt="" />
+                                    <div class="cardpay-popover nopopoverdisplay">
+                                        <img src="/SveaCardPay.Mvc.Stage/Content/images/card_info_exp.png" alt="" />
+                                    </div>
+                                </span>
+                                <div class="err-msg-block">
+                                    <span data-valmsg-for="expdate" data-valmsg-replace="true" role="alert"></span>
+                                    <span data-valmsg-for="month" data-valmsg-replace="true" role="alert"></span>
+                                    <span data-valmsg-for="year" data-valmsg-replace="true" role="alert"></span>
+                                    <span data-valmsg-for="DebCredType" data-valmsg-replace="true" role="alert"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 right-panel" id="CVVDiv">
+                                <input class="form-control listener" data-val="true" data-val-length="Please check the security code" data-val-length-max="4" data-val-length-min="3" data-val-required="Please check the security code" id="CVV" maxlength="4" name="CVV" pattern="\d*" placeholder="" tabindex="4" title="CVV2/CVC2" type="text" value="" />
+                                <span class="placeholder placeholder-down" id="CVVPlaceholder">CVV2/CVC2</span>
+                                <span class="popovertrigger questionMarkPopover">
+                                    <img src="/SveaCardPay.Mvc.Stage/Content/images/info-icon.svg" alt="" />
+                                    <div class="cardpay-popover nopopoverdisplay">
+                                        <img src="/SveaCardPay.Mvc.Stage/Content/images/card_info_CVV.png" alt="" />
+                                    </div>
+                                </span>
+                                <div class="err-msg-block">
+                                    <span data-valmsg-for="CVV" data-valmsg-replace="true" role="alert"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="EmptyFields" class="hidden">Please enter your card information</span>
+                    <div class="payment-icons">
+                                <img id="visa-logo" class="payment-icons" src="/SveaCardPay.Mvc.Stage/Content/images/visa-logo.svg" alt="Visa">
+                                <img id="mastercard-logo" class="payment-icons" src="/SveaCardPay.Mvc.Stage/Content/images/mastercard-logo.svg" alt="Mastercard">
+                                <img id="amex-logo" class="amex-logo" src="/SveaCardPay.Mvc.Stage/Content/images/amex-logo.svg" alt="Amex">
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg text-center mb-32" id="AmountDiv">
+                    <div class="col-xs-12 amount-style mb-10">
+                        <b>SEK 5</b>
+                    </div>
+                    <div class="col-xs-12 amount-info-style">
+                        Total amount (incl. VAT)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button id="submit-button" name="submit-button" type="submit" data-style="expand-right" class="button button__contained" tabindex="5">
+                            <div id="submitSpinner" class="spinner-container nodisplay">
+                                <div class="lds-spinner lds-spinner--color-white">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                            Complete purchase
+                        </button>
+
+                        <button id="cancel-button" type="button" data-link="/SveaCardPay.Mvc.Stage/Payment/Cancel/3284719d-5a21-4815-ab52-4e3ccb5ddef0" data-style="expand-right" class="button button__outlined" tabindex="-1">
+                            <div id="cancelSpinner" class="spinner-container nodisplay">
+                                <div class="lds-spinner">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <input id="SessionId" name="SessionId" type="hidden" value="3284719d-5a21-4815-ab52-4e3ccb5ddef0" />
+            <input id="BrandingName" name="BrandingName" type="hidden" value="newhope" />
+        </form>
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 text-center">
+                <hr />
+                <img class="svea-logo mt-1" src="/SveaCardPay.Mvc.Stage/Content/branding/general/images/svea_logo.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script src="/SveaCardPay.Mvc.Stage/bundles/sveacommon.min.js"></script>
+    <script src="/SveaCardPay.Mvc.Stage/bundles/sveacheckout.min.js"></script>
+</body>
+</html>
+
+Success!
+----------------------------------------------------------

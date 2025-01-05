@@ -11,6 +11,7 @@ import (
     "math/rand"
     "net/http"
     "os"
+    "regexp"
     "strings"
     "time"
 )
@@ -69,11 +70,37 @@ func sendRequest() {
 
     if (resp.StatusCode == 200 || resp.StatusCode == 201) && strings.Contains(strings.ToLower(string(respBody)), "created") {
         fmt.Println("Success!")
+
+        orderId := extractOrderId(string(respBody))
+        if orderId != "" {
+            //fmt.Printf("Extracted OrderId: %s\n", orderId)
+            saveOrderIdToFile("./created_order_id.txt", orderId)
+        } else {
+            fmt.Println("OrderId not found in response.")
+        }
     } else {
         fmt.Println("Failed...")
     }
 
     fmt.Println("----------------------------------------------------------")
+}
+
+func extractOrderId(responseBody string) string {
+    re := regexp.MustCompile(`"OrderId":\s*(\d+)`)
+    match := re.FindStringSubmatch(responseBody)
+    if len(match) > 1 {
+        return match[1]
+    }
+    return ""
+}
+
+func saveOrderIdToFile(filePath, orderId string) {
+    err := ioutil.WriteFile(filePath, []byte(orderId), 0644)
+    if err != nil {
+        fmt.Printf("Error saving OrderId to file: %s\n", err)
+    } else {
+        //fmt.Printf("OrderId saved to %s\n", filePath)
+    }
 }
 
 func setHTTPRequestHeaders(operation, requestMessage string) (map[string]string, error) {

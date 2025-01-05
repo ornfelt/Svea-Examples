@@ -1,6 +1,16 @@
 <?php
 
-$orderId = "CHECKOUT_ORDER_TO_FETCH";
+try {
+    $orderId = trim(file_get_contents('./created_order_id.txt'));
+    if (!$orderId) {
+        throw new Exception("OrderId is empty in the file.");
+    }
+    //echo "Using OrderId: $orderId\n";
+} catch (Exception $e) {
+    echo "Failed to read OrderId from file: " . $e->getMessage() . "\n";
+    exit;
+}
+
 $merchantId = "CHECKOUT_MERCHANT_ID";
 $secretWord = "CHECKOUT_SECRET_KEY";
 

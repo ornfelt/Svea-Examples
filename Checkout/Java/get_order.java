@@ -11,10 +11,12 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class get_order {
 
-    private static final String ORDER_ID = "CHECKOUT_ORDER_TO_FETCH";
+    private static String order_id = "";
     private static final String MERCHANT_ID = "CHECKOUT_MERCHANT_ID";
     private static final String SECRET_WORD = "CHECKOUT_SECRET_KEY";
     //private static final String BASE_URL = "https://paymentadminapistage.svea.com/api/v1/orders/";
@@ -24,7 +26,15 @@ public class get_order {
     public static void main(String[] args) {
         System.out.println("Running GET request for Checkout (Java)");
         try {
-            String url = BASE_URL + ORDER_ID;
+            try {
+                order_id = new String(Files.readAllBytes(Paths.get("./created_order_id.txt"))).trim();
+                //System.out.println("Using OrderId: " + order_id);
+            } catch (IOException e) {
+                System.err.println("Error reading OrderId from file: " + e.getMessage());
+                return;
+            }
+
+            String url = BASE_URL + order_id;
             Map<String, String> myHeaders = getRequestHeaders("", null);
 
             //URL obj = new URL(url);

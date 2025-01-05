@@ -1,6 +1,11 @@
 use rand::{distributions::Alphanumeric, Rng};
 use reqwest;
 use std::error::Error;
+use std::fs::File;
+use std::io::Write;
+use regex::Regex;
+
+// cargo add regex
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -94,6 +99,23 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     if response_status == 200 && response_body.to_lowercase().contains("accepted>true") {
         println!("Success!");
+
+        let svea_order_id_regex = Regex::new(r#"<(?:\w+:)?SveaOrderId>(\d+)</(?:\w+:)?SveaOrderId>"#).unwrap();
+        if let Some(captures) = svea_order_id_regex.captures(&response_body) {
+            if let Some(order_id) = captures.get(1) {
+                let order_id = order_id.as_str();
+                println!("Extracted SveaOrderId: {}", order_id);
+
+                // Save the SveaOrderId to the file
+                let file_path = "../created_order_id.txt";
+                let mut file = File::create(file_path)?;
+                writeln!(file, "{}", order_id)?;
+
+                println!("SveaOrderId saved to {}", file_path);
+            }
+        } else {
+            println!("SveaOrderId not found in the response.");
+        }
     } else {
         println!("Failed...");
     }

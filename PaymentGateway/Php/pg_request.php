@@ -32,7 +32,6 @@ class PgRequest
             //echo "Response status code: " . $response['status_code'] . "\n";
             //echo "Response message: " . $response['body'] . "\n";
 
-            // Parsing the XML to find the 'message' element
             $xml = simplexml_load_string($response['body']);
             $messageElement = $xml->xpath('//message');
             if ($messageElement) {
@@ -123,12 +122,11 @@ class PgRequest
     }
 }
 
-// Usage
 $tester = new PgRequest();
-echo "Running GET request for PaymentGateway (Php)\n";
-$tester->makeGetQueryTransactionIdRequestAsync();
 echo "Running Create request for PaymentGateway (Php)\n";
 $tester->makePostRequestAsync();
+echo "Running GET request for PaymentGateway (Php)\n";
+$tester->makeGetQueryTransactionIdRequestAsync();
 echo "----------------------------------------------------------\n";
 
 ?>

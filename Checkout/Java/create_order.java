@@ -14,6 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.Base64;
 import java.time.format.DateTimeFormatter;
 import java.time.ZonedDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SveaAuth {
     private static final String merchantId = "CHECKOUT_MERCHANT_ID";
@@ -62,14 +64,32 @@ public class SveaAuth {
                 //System.out.println("response body: " + response.body());
                 //System.out.println("response status: " + response.statusCode());
 
-                if (response.statusCode() == 200 || response.statusCode() == 201) {
-                    System.out.println("Success!");
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
+                System.out.println("Success!");
+
+                String responseBody = response.body();
+                Pattern orderIdPattern = Pattern.compile("\"OrderId\":\\s*(\\d+)", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = orderIdPattern.matcher(responseBody);
+
+                if (matcher.find()) {
+                    String orderId = matcher.group(1);
+                    //System.out.println("Extracted OrderId: " + orderId);
+                    Path outputFilePath = Paths.get("./created_order_id.txt");
+                    try {
+                        Files.writeString(outputFilePath, orderId);
+                        //System.out.println("OrderId saved to " + outputFilePath.toAbsolutePath());
+                    } catch (IOException e) {
+                        System.err.println("Error saving OrderId to file: " + e.getMessage());
+                    }
                 } else {
-                    System.out.println("Failed...");
+                    System.err.println("OrderId not found in response.");
                 }
-                System.out.println("----------------------------------------------------------");
-                return null;
-            });
+            } else {
+                System.out.println("Failed...");
+            }
+            System.out.println("----------------------------------------------------------");
+            return null;
+        });
     }
 
     private static String[] setHttpRequestHeaders(String requestMessage) throws NoSuchAlgorithmException {

@@ -4,9 +4,9 @@ open System.Net.Http
 open System.Net.Http.Headers
 open System.Security.Cryptography
 open System.Text
-open System.Threading.Tasks
 open System.Globalization
 open System.IO
+open System.Text.RegularExpressions
 
 let generateRandomOrderId () =
     let random = Random()
@@ -32,6 +32,21 @@ let setHttpRequestHeaders (client: HttpClient) (request: HttpRequestMessage) (bo
     request.Headers.Add("Authorization", "Svea " + token) |> ignore
     request.Headers.Add("Timestamp", timestamp) |> ignore
 
+let extractAndSaveOrderId (responseBody: string) =
+    let orderIdRegex = Regex(@"""OrderId"":\s*(\d+)", RegexOptions.IgnoreCase)
+    let regMatch = orderIdRegex.Match(responseBody)
+    if regMatch.Success then
+        let orderId = regMatch.Groups.[1].Value
+        //printfn "Extracted OrderId: %s" orderId
+        let filePath = "../created_order_id.txt"
+        try
+            File.WriteAllText(filePath, orderId)
+            //printfn "OrderId saved to %s" filePath
+        with
+        | ex -> printfn "Failed to save OrderId: %s" ex.Message
+    else
+        printfn "OrderId not found in the response."
+
 let sendRequest () =
     async {
         printfn "Running Create request for Checkout (F#)"
@@ -53,6 +68,7 @@ let sendRequest () =
 
         if response.StatusCode = HttpStatusCode.OK || response.StatusCode = HttpStatusCode.Created then
             printfn "Success!"
+            extractAndSaveOrderId responseBody
         else
             printfn "Failed..."
         printfn "----------------------------------------------------------"

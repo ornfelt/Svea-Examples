@@ -4,11 +4,13 @@
 // Usage: g++ -o get_order get_order.cpp -lcurl && ./get_order
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <curl/curl.h>
 #include <algorithm>
 #include <cctype>
 
+// Handle CURL data
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s) {
     size_t newLength = size * nmemb;
     try {
@@ -18,6 +20,22 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::stri
         return 0;
     }
     return newLength;
+}
+
+std::string read_order_id_from_file(const std::string &filePath) {
+    std::ifstream inFile(filePath);
+    if (!inFile) {
+        throw std::runtime_error("Error: Could not open file: " + filePath);
+    }
+    std::string orderId;
+    std::getline(inFile, orderId);
+    inFile.close();
+
+    if (orderId.empty()) {
+        throw std::runtime_error("Error: Order ID file is empty.");
+    }
+
+    return orderId;
 }
 
 int main() {
@@ -49,7 +67,7 @@ int main() {
                             <dat:GetOrderInformation>
                                 <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
                                 <dat:OrderType>Invoice</dat:OrderType>
-                                <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
+                                <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>
                             </dat:GetOrderInformation>
                         </dat:OrdersToRetrieve>
                     </tem:request>
@@ -57,6 +75,16 @@ int main() {
             </soap:Body>
         </soap:Envelope>
         )";
+
+        std::string sveaOrderId = read_order_id_from_file("./created_order_id.txt");
+        //std::cout << "Using SveaOrderId: " << sveaOrderId << std::endl;
+
+        size_t pos = soapEnvelope.find("WEBPAY_ORDER_TO_FETCH_VALUE");
+        if (pos != std::string::npos) {
+            soapEnvelope.replace(pos, std::string("WEBPAY_ORDER_TO_FETCH_VALUE").length(), sveaOrderId);
+        } else {
+            throw std::runtime_error("Error: Placeholder not found in SOAP envelope.");
+        }
 
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/soap+xml;charset=UTF-8");

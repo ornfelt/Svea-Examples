@@ -26,13 +26,29 @@ Module Program
                                          "<dat:GetOrderInformation>" & _
                                          "<dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>" & _
                                          "<dat:OrderType>Invoice</dat:OrderType>" & _
-                                         "<dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>" & _
+                                         "<dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>" & _
                                          "</dat:GetOrderInformation>" & _
                                          "</dat:OrdersToRetrieve>" & _
                                          "</tem:request>" & _
                                          "</tem:GetOrders>" & _
                                          "</soap:Body>" & _
                                          "</soap:Envelope>"
+
+            Dim sveaOrderId As String = "WEBPAY_ORDER_TO_FETCH_VALUE"
+            Try
+                Dim filePath As String = "../created_order_id.txt"
+
+                If File.Exists(filePath) Then
+                    sveaOrderId = File.ReadAllText(filePath).Trim()
+                Else
+                    Console.WriteLine("Order ID file not found. Using default placeholder.")
+                End If
+            Catch ex As Exception
+                Console.WriteLine($"Failed to read SveaOrderId from file: {ex.Message}")
+            End Try
+
+            'Console.WriteLine("Using SveaOrderId: " + sveaOrderId)
+            soapEnvelope = soapEnvelope.replace("WEBPAY_ORDER_TO_FETCH_VALUE", sveaOrderId)
 
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "POST"
@@ -62,3 +78,4 @@ Module Program
         End Try
     End Sub
 End Module
+

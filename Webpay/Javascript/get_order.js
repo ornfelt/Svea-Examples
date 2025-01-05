@@ -1,5 +1,7 @@
 // npm install axios
 
+const fs = require('fs'); // Import the File System module
+
 const axios = require('axios');
 
 async function getOrders() {
@@ -8,7 +10,7 @@ async function getOrders() {
         const url = "https://webpayadminservicestage.svea.com/AdminService.svc/secure";
         const soapAction = "http://tempuri.org/IAdminService/GetOrders";
 
-        const soapEnvelope = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/" xmlns:dat="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service">
+        let soapEnvelope = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/" xmlns:dat="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service">
             <soap:Header xmlns:wsa="http://www.w3.org/2005/08/addressing">
                 <wsa:Action>${soapAction}</wsa:Action>
                 <wsa:To>${url}</wsa:To>
@@ -24,13 +26,28 @@ async function getOrders() {
                             <dat:GetOrderInformation>
                                 <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
                                 <dat:OrderType>Invoice</dat:OrderType>
-                                <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
+                                <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>
                             </dat:GetOrderInformation>
                         </dat:OrdersToRetrieve>
                     </tem:request>
                 </tem:GetOrders>
             </soap:Body>
         </soap:Envelope>`;
+
+        let sveaOrderId;
+        try {
+            const filePath = './created_order_id.txt';
+            if (fs.existsSync(filePath)) {
+                sveaOrderId = fs.readFileSync(filePath, 'utf8').trim();
+                //console.log(`Using SveaOrderId: ${sveaOrderId}`);
+                soapEnvelope = soapEnvelope.replace("WEBPAY_ORDER_TO_FETCH_VALUE", sveaOrderId);
+            } else {
+                throw new Error(`File not found: ${filePath}`);
+            }
+        } catch (error) {
+            console.error("Error reading SveaOrderId from file:", error.message);
+            return;
+        }
 
         const config = {
             headers: {

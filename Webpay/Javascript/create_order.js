@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 async function main() {
     console.log("Running Create request for Webpay (Javascript)");
     const url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
@@ -80,10 +82,24 @@ async function main() {
         //console.log("Response:");
         //console.log(responseText);
 
-        if (response.status === 200 && responseText.toLowerCase().includes("accepted>true"))
+        if (response.status === 200 && responseText.toLowerCase().includes("accepted>true")) {
             console.log("Success!");
-        else
+
+            const sveaOrderIdMatch = responseText.match(/<SveaOrderId>(\d+)<\/SveaOrderId>/i);
+            if (sveaOrderIdMatch && sveaOrderIdMatch[1]) {
+                const sveaOrderId = sveaOrderIdMatch[1];
+                console.log("SveaOrderId extracted:", sveaOrderId);
+
+                const filePath = './created_order_id.txt';
+                fs.writeFileSync(filePath, sveaOrderId, 'utf8');
+                console.log(`SveaOrderId saved to ${filePath}`);
+            } else {
+                console.log("Failed to extract SveaOrderId.");
+            }
+        } else {
             console.log("Failed...");
+        }
+
         console.log("----------------------------------------------------------");
     } catch (e) {
         console.error(e);
@@ -91,3 +107,4 @@ async function main() {
 }
 
 main();
+

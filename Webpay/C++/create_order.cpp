@@ -5,12 +5,14 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <regex>
 #include <curl/curl.h>
 #include <algorithm>
 #include <cctype>
 #include <random>
 
-// Callback function writes data to a std::string
+// Callback function to write data to a std::string
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp) {
     userp->append((char*)contents, size * nmemb);
     return size * nmemb;
@@ -29,6 +31,18 @@ std::string generate_random_string(size_t length) {
     return random_string;
 }
 
+void save_order_id_to_file(const std::string &orderId) {
+    const std::string filePath = "./created_order_id.txt";
+    std::ofstream outFile(filePath, std::ios::out | std::ios::trunc);
+    if (!outFile) {
+        std::cerr << "Error: Unable to open file for writing: " << filePath << std::endl;
+        return;
+    }
+    outFile << orderId;
+    outFile.close();
+    //std::cout << "SveaOrderId saved to: " << filePath << std::endl;
+}
+
 int main() {
     CURL *curl;
     CURLcode res;
@@ -38,7 +52,7 @@ int main() {
     curl_global_init(CURL_GLOBAL_ALL);
 
     curl = curl_easy_init();
-    if(curl) {
+    if (curl) {
         std::cout << "Running Create request for Webpay (C++)" << std::endl;
         const char *url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
         const char *soapAction = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
@@ -120,7 +134,7 @@ int main() {
 
         res = curl_easy_perform(curl);
 
-        if(res != CURLE_OK)
+        if (res != CURLE_OK)
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
         else {
             //std::cout << "Response: " << readBuffer << std::endl;
@@ -130,10 +144,20 @@ int main() {
             std::transform(readBuffer.begin(), readBuffer.end(), readBuffer.begin(), 
                            [](unsigned char c){ return std::tolower(c); });
 
-            if (httpCode == 200 && readBuffer.find("accepted>true") != std::string::npos)
+            if (httpCode == 200 && readBuffer.find("accepted>true") != std::string::npos) {
                 std::cout << "Success!" << std::endl;
-            else if (httpCode == 200)
-                std::cout << "Success!" << std::endl;
+                std::regex sveaOrderIdRegex(R"(<(?:\w+:)?SveaOrderId>(\d+)</(?:\w+:)?SveaOrderId>)", std::regex::icase);
+                std::smatch match;
+
+                if (httpCode == 200 && std::regex_search(readBuffer, match, sveaOrderIdRegex)) {
+                    std::string sveaOrderId = match[1].str();
+                    //std::cout << "SveaOrderId extracted: " << sveaOrderId << std::endl;
+                    save_order_id_to_file(sveaOrderId);
+                } else {
+                    std::cout << "Failed to extract SveaOrderId." << std::endl;
+                }
+            } else if (httpCode == 200)
+                std::cout << "Success! But not accepted..." << std::endl;
             else
                 std::cout << "Failed..." << std::endl;
         }

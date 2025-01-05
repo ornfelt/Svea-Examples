@@ -2,7 +2,6 @@
 open System.Net.Http
 open System.Security.Cryptography
 open System.Text
-open System.Threading.Tasks
 open System.Xml.Linq
 open System.Collections.Generic
 
@@ -111,10 +110,11 @@ let makePostRequestAsync () =
 [<EntryPoint>]
 let main argv =
     async {
-        Console.WriteLine("Running GET request for PaymentGateway (F#)")
-        do! makeGetQueryTransactionIdRequestAsync ()
         Console.WriteLine("Running Create request for PaymentGateway (F#)")
         do! makePostRequestAsync ()
+        Console.WriteLine("Running GET request for PaymentGateway (F#)")
+        do! makeGetQueryTransactionIdRequestAsync ()
         Console.WriteLine("----------------------------------------------------------")
     } |> Async.RunSynchronously
     0
+

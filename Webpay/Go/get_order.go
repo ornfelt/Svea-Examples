@@ -29,13 +29,29 @@ func main() {
 						<dat:GetOrderInformation>
 							<dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
 							<dat:OrderType>Invoice</dat:OrderType>
-							<dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
+							<dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>
 						</dat:GetOrderInformation>
 					</dat:OrdersToRetrieve>
 				</tem:request>
 			</tem:GetOrders>
 		</soap:Body>
 	</soap:Envelope>`
+
+    orderIdFilePath := "./created_order_id.txt"
+    orderIdBytes, err := ioutil.ReadFile(orderIdFilePath)
+    if err != nil {
+        fmt.Printf("Error reading order ID file (%s): %v\n", orderIdFilePath, err)
+        return
+    }
+
+    orderId := strings.TrimSpace(string(orderIdBytes))
+    if orderId == "" {
+        fmt.Println("Order ID file is empty.")
+        return
+    }
+
+    //fmt.Printf("Using SveaOrderId: %s\n", orderId)
+    soapEnvelope = strings.ReplaceAll(soapEnvelope, "WEBPAY_ORDER_TO_FETCH_VALUE", orderId)
 
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", url, bytes.NewBufferString(soapEnvelope))

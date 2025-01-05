@@ -2,6 +2,7 @@ Imports System
 Imports System.IO
 Imports System.Net
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 Module Program
     Sub Main()
@@ -92,6 +93,25 @@ Module Program
 
                     If response.StatusCode = HttpStatusCode.OK AndAlso responseContent.ToLower().Contains("accepted>true") Then
                         Console.WriteLine("Success!")
+
+                        Dim sveaOrderIdRegex As New Regex("<(?:\w+:)?SveaOrderId>(\d+)</(?:\w+:)?SveaOrderId>", RegexOptions.IgnoreCase)
+                        Dim match As Match = sveaOrderIdRegex.Match(responseContent)
+
+                        If match.Success Then
+                            Dim sveaOrderId As String = match.Groups(1).Value
+                            'Console.WriteLine($"SveaOrderId extracted: {sveaOrderId}")
+
+                            Dim filePath As String = "../created_order_id.txt"
+                            Try
+                                File.WriteAllText(filePath, sveaOrderId)
+                                'Console.WriteLine($"SveaOrderId saved to {filePath}")
+                            Catch ex As Exception
+                                Console.WriteLine($"Failed to save SveaOrderId to file: {ex.Message}")
+                            End Try
+                        Else
+                            Console.WriteLine("Failed to extract SveaOrderId.")
+                        End If
+
                     Else
                         Console.WriteLine("Failed...")
                     End If
@@ -113,3 +133,4 @@ Module Program
     End Function
 
 End Module
+

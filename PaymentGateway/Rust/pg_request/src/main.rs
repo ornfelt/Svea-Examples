@@ -9,10 +9,10 @@ use std::fmt::Write;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("Running GET request for PaymentGateway (Rust)");
-    make_get_query_transaction_id_request().await?;
     println!("Running Create request for PaymentGateway (Rust)");
     make_post_request().await?;
+    println!("Running GET request for PaymentGateway (Rust)");
+    make_get_query_transaction_id_request().await?;
     println!("----------------------------------------------------------");
     Ok(())
 }

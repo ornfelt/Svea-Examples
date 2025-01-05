@@ -4,14 +4,14 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"fmt"
+	"io"
+	"os"
 	"net/http"
+	"strings"
 	"time"
-    "io"
-    "strings"
 )
 
 const (
-	orderID     = "CHECKOUT_ORDER_TO_FETCH"
 	merchantID  = "CHECKOUT_MERCHANT_ID"
 	secretWord  = "CHECKOUT_SECRET_KEY"
 	//baseURL     = "https://paymentadminapistage.svea.com/api/v1/orders/"
@@ -53,6 +53,15 @@ func main() {
 	testInstance := &TestClass{}
 	myHeaders := testInstance.getRequestHeaders("", nil)
 	//fmt.Println(myHeaders)
+
+    filePath := "./created_order_id.txt"
+    orderIDBytes, err := os.ReadFile(filePath)
+    if err != nil {
+        fmt.Printf("Error reading OrderId from file: %v\n", err)
+        return
+    }
+    orderID := strings.TrimSpace(string(orderIDBytes))
+    //fmt.Printf("Using OrderID: %s\n", orderID)
 
 	url := baseURL + orderID
 	// payload := map[string]interface{}{}

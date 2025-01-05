@@ -7,7 +7,6 @@ class SveaAuth {
         $url = "https://checkoutapistage.svea.com/api/orders";
         $randomOrderId = substr(str_shuffle(str_repeat('0123456789', 15)), 0, 15);
 
-        // Attempt to read the JSON payload from file
         $bodyStr = '';
         try {
             if (!file_exists('create_order_payload.json')) {
@@ -27,6 +26,20 @@ class SveaAuth {
 
         if ($response['status_code'] == 200 || $response['status_code'] == 201) {
             echo "Success!\n";
+
+            if (preg_match('/"OrderId":\s*(\d+)/', $response['body'], $matches)) {
+                $orderId = $matches[1];
+
+                $filePath = './created_order_id.txt';
+                try {
+                    file_put_contents($filePath, $orderId);
+                    //echo "OrderId saved to {$filePath}\n";
+                } catch (Exception $e) {
+                    echo "Failed to save OrderId: " . $e->getMessage() . "\n";
+                }
+            } else {
+                echo "OrderId not found in the response.\n";
+            }
         } else {
             echo "Failed...\n";
         }
@@ -47,7 +60,7 @@ class SveaAuth {
     public static function createAuthenticationToken($requestMessage, $timestamp) {
         $merchantId = "CHECKOUT_MERCHANT_ID";
         $secretKey = "CHECKOUT_SECRET_KEY";
-        
+
         $hashString = hash('sha512', $requestMessage . $secretKey . $timestamp);
         $authToken = base64_encode($merchantId . ":" . $hashString);
 

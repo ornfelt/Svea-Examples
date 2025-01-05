@@ -5,7 +5,6 @@ Imports System.Text
 Imports System.Globalization
 
 Public Class TestClass
-    Private Const OrderId As String = "CHECKOUT_ORDER_TO_FETCH"
     Private Const MerchantId As String = "CHECKOUT_MERCHANT_ID"
     Private Const SecretWord As String = "CHECKOUT_SECRET_KEY"
 
@@ -39,31 +38,49 @@ Public Class TestClass
     Public Async Function PerformGetRequest() As Task
         Console.WriteLine("Running GET request for Checkout (VB.NET)")
 
-        Dim headers As Dictionary(Of String, String) = GetRequestHeaders()
-        'Dim url As String = "https://paymentadminapistage.svea.com/api/v1/orders/" & OrderId
-        Dim url As String = "https://checkoutapistage.svea.com/api/orders/" & OrderId
+        Dim orderIdPath As String = "../created_order_id.txt"
+        Dim orderId As String = ""
 
-        Using client As New HttpClient()
-            For Each header In headers
-                client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value)
-            Next
+        Try
+        If IO.File.Exists(orderIdPath) Then
+            orderId = Await IO.File.ReadAllTextAsync(orderIdPath).ConfigureAwait(False)
+            orderId = orderId.Trim()
+            'Console.WriteLine("Using OrderId: " & orderId)
+        Else
+            Console.WriteLine("OrderId file not found.")
+            Return
+        End If
+        Catch ex As Exception
+        Console.WriteLine("Error reading OrderId from file: " & ex.Message)
+        Return
+    End Try
 
-            Dim response As HttpResponseMessage = Await client.GetAsync(url)
+    Dim headers As Dictionary(Of String, String) = GetRequestHeaders()
+    'Dim url As String = "https://paymentadminapistage.svea.com/api/v1/orders/" & orderId
+    Dim url As String = "https://checkoutapistage.svea.com/api/orders/" & orderId
 
-            If response.IsSuccessStatusCode Then
-                Console.WriteLine("Success!")
-                Dim responseBody As String = Await response.Content.ReadAsStringAsync()
-                'Console.WriteLine("response body: " & responseBody)
-            Else
-                Console.WriteLine("Failed...")
-            End If
-        End Using
+    Using client As New HttpClient()
+    For Each header In headers
+        client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value)
+    Next
+
+    Dim response As HttpResponseMessage = Await client.GetAsync(url)
+
+    If response.IsSuccessStatusCode Then
+        Console.WriteLine("Success!")
+        Dim responseBody As String = Await response.Content.ReadAsStringAsync()
+        'Console.WriteLine("response body: " & responseBody)
+    Else
+        Console.WriteLine("Failed...")
+    End If
+End Using
     End Function
 End Class
 
 Module Program
-    Sub Main()
-        Dim testInstance As New TestClass()
-        testInstance.PerformGetRequest().Wait()
-    End Sub
+Sub Main()
+    Dim testInstance As New TestClass()
+    testInstance.PerformGetRequest().Wait()
+End Sub
 End Module
+

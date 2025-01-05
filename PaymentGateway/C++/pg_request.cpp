@@ -94,19 +94,16 @@ private:
             //curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
             //curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
 
-            // Response information
             std::string responseString;
             std::string headerString;
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeFunction);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
             curl_easy_setopt(curl, CURLOPT_HEADERDATA, &headerString);
 
-            // Set headers
             struct curl_slist* headers = NULL;
             headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
             curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-            // Enable verbose output for debugging
             //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
             CURLcode res = curl_easy_perform(curl);
@@ -129,9 +126,6 @@ private:
                 else
                     std::cout << "Failed..." << std::endl;
 
-                // Additional processing of the response can be done here
-
-                // Clean up headers list
                 curl_slist_free_all(headers);
                 curl_easy_cleanup(curl);
             }

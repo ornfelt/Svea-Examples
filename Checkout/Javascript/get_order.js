@@ -1,7 +1,7 @@
 const https = require('https');
 const crypto = require('crypto');
+const fs = require('fs').promises;
 
-const orderId = "CHECKOUT_ORDER_TO_FETCH";
 const merchantId = "CHECKOUT_MERCHANT_ID";
 const secretWord = "CHECKOUT_SECRET_KEY";
 
@@ -45,19 +45,34 @@ class TestClass {
     }
 }
 
-console.log("Running GET request for Checkout (Javascript)");
-const testInstance = new TestClass();
-const myHeaders = testInstance.getHeaders({'Content-Type': 'application/json'});
-//const url = `https://paymentadminapistage.svea.com/api/v1/orders/${orderId}`;
-const url = `https://checkoutapistage.svea.com/api/orders/${orderId}`;
+async function main() {
+    let orderId = "";
+    try {
+        const orderIdData = await fs.readFile('./created_order_id.txt', 'utf8');
+        orderId = orderIdData.trim();
+        //console.log(`Using OrderId: ${orderId}`);
+    } catch (err) {
+        console.error(`Failed to read OrderId from file: ${err.message}`);
+        return;
+    }
 
-testInstance.makeGetRequest(url, myHeaders)
-    .then(response => {
-        //console.log("Response: " + response + "\n");
-        if (response) {
-            console.log("Success!");
-        } else {
-            console.log("Failed...");
-        }
-    })
-    .catch(error => console.log(error));
+    console.log("Running GET request for Checkout (Javascript)");
+    const testInstance = new TestClass();
+    const myHeaders = testInstance.getHeaders({'Content-Type': 'application/json'});
+    //const url = `https://paymentadminapistage.svea.com/api/v1/orders/${orderId}`;
+    const url = `https://checkoutapistage.svea.com/api/orders/${orderId}`;
+
+    testInstance.makeGetRequest(url, myHeaders)
+        .then(response => {
+            //console.log("Response: " + response + "\n");
+            if (response) {
+                console.log("Success!");
+            } else {
+                console.log("Failed...");
+            }
+        })
+        .catch(error => console.log(error));
+}
+
+main();
+

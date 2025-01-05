@@ -5,6 +5,8 @@ import hashlib
 import httpx
 import json
 import random
+import re
+from pathlib import Path
 
 class SveaAuth:
     @staticmethod
@@ -90,6 +92,21 @@ class SveaAuth:
             #print("response body:", response.text)
             if response.status_code == 200 or response.status_code == 201:
                 print("Success!")
+                match = re.search(r'"OrderId":\s*(\d+)', response.text)
+                if match:
+                    order_id = match.group(1)
+                    #print(f"Extracted OrderId: {order_id}")
+                    
+                    try:
+                        output_path = Path("./created_order_id.txt")
+                        output_path.parent.mkdir(parents=True, exist_ok=True)
+                        with open(output_path, "w") as file:
+                            file.write(order_id)
+                        #print(f"OrderId saved to {output_path}")
+                    except Exception as e:
+                        print(f"Failed to save OrderId: {e}")
+                else:
+                    print("OrderId not found in the response.")
             else:
                 print("Failed...")
         print("----------------------------------------------------------")
@@ -119,3 +136,4 @@ async def main():
     await SveaAuth.send_request()
 
 asyncio.run(main())
+

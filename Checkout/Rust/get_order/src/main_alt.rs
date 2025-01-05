@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use tokio::runtime::Runtime;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 
-const ORDER_ID: &str = "CHECKOUT_ORDER_TO_FETCH";
+const ORDER_ID: &str = "";
 const MERCHANT_ID: &str = "123";
 const SECRET_WORD: &str = "xxx";
 //const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";

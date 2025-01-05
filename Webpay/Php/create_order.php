@@ -1,6 +1,6 @@
 <?php
 
-echo "Running Create request for PaymentGateway (Php)\n";
+echo "Running Create request for Webpay (Php)\n";
 
 $url = "https://webpaywsstage.svea.com/sveawebpay.asmx";
 $action = "https://webservices.sveaekonomi.se/webpay/CreateOrderEu";
@@ -90,11 +90,27 @@ if (curl_errno($ch)) {
     $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     //echo "Response Code: " . $statusCode . "\n";
     //echo "Response: \n" . $response;
-    if ($statusCode == 200 && strpos(strtolower($response), "accepted>true") !== false)
+    if ($statusCode == 200 && strpos(strtolower($response), "accepted>true") !== false) {
         echo "Success!\n";
-    else
+        $matches = [];
+        if (preg_match('/<SveaOrderId>(\d+)<\/SveaOrderId>/', $response, $matches)) {
+            $sveaOrderId = $matches[1];
+            //echo "SveaOrderId extracted: $sveaOrderId\n";
+
+            $filePath = './created_order_id.txt';
+            if (file_put_contents($filePath, $sveaOrderId) !== false) {
+                //echo "SveaOrderId saved to $filePath\n";
+            } else {
+                echo "Failed to save SveaOrderId to $filePath\n";
+            }
+        } else {
+            echo "Failed to extract SveaOrderId.\n";
+        }
+    } else {
         echo "Failed...\n";
+    }
     echo "----------------------------------------------------------\n";
 }
 
 curl_close($ch);
+

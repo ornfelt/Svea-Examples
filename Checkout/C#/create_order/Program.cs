@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Globalization;
-using System.Diagnostics;
-using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Testing
 {
@@ -44,9 +38,33 @@ namespace Testing
             //Console.WriteLine("response body: " + responseBody);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK || 
-                response.StatusCode == System.Net.HttpStatusCode.Created)
+                    response.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 Console.WriteLine("Success!");
+
+                var orderIdRegex = new Regex(@"""OrderId"":\s*(\d+)", RegexOptions.IgnoreCase);
+                var match = orderIdRegex.Match(responseBody);
+
+                if (match.Success)
+                {
+                    var orderId = match.Groups[1].Value;
+                    //Console.WriteLine($"Extracted OrderId: {orderId}");
+
+                    var outputFilePath = "../created_order_id.txt";
+                    try
+                    {
+                        await File.WriteAllTextAsync(outputFilePath, orderId);
+                        //Console.WriteLine($"OrderId saved to {outputFilePath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to save OrderId to file: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Failed to extract OrderId from the response.");
+                }
             }
             else
             {

@@ -1,4 +1,5 @@
 import requests
+import os
 
 def get_orders():
     print("Running GET request for Webpay (Python)")
@@ -25,7 +26,7 @@ def get_orders():
                         <dat:GetOrderInformation>
                             <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
                             <dat:OrderType>Invoice</dat:OrderType>
-                            <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
+                            <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>
                         </dat:GetOrderInformation>
                     </dat:OrdersToRetrieve>
                 </tem:request>
@@ -33,6 +34,17 @@ def get_orders():
         </soap:Body>
     </soap:Envelope>
     """.format(soap_action=soap_action, url=url)
+
+    order_id_file = "./created_order_id.txt"
+    if not os.path.exists(order_id_file):
+        print(f"Error: {order_id_file} does not exist.")
+        return
+
+    with open(order_id_file, "r") as file:
+        svea_order_id = file.read().strip()
+
+    #print(f"Using SveaOrderId: {svea_order_id}")
+    soap_envelope = soap_envelope.replace("WEBPAY_ORDER_TO_FETCH_VALUE", svea_order_id)
 
     response = requests.post(url, data=soap_envelope, headers=headers)
 
@@ -45,3 +57,4 @@ def get_orders():
 
 if __name__ == "__main__":
     get_orders()
+

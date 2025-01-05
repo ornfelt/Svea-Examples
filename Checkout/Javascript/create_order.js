@@ -28,6 +28,24 @@ class SveaAuth {
 
             if (response.status === 200 || response.status === 201) {
                 console.log("Success!");
+
+                const orderIdRegex = /"OrderId":\s*(\d+)/i;
+                const match = orderIdRegex.exec(JSON.stringify(response.data));
+
+                if (match) {
+                    const orderId = match[1];
+                    //console.log(`Extracted OrderId: ${orderId}`);
+
+                    try {
+                        await fs.writeFile('./created_order_id.txt', orderId, 'utf8');
+                        //console.log(`OrderId saved to ../created_order_id.txt`);
+                    } catch (fileError) {
+                        console.error(`Failed to save OrderId to file: ${fileError.message}`);
+                    }
+                } else {
+                    console.error("OrderId not found in the response.");
+                }
+
             } else {
                 console.log("Failed...");
             }
@@ -51,7 +69,7 @@ class SveaAuth {
     static createAuthenticationToken(requestMessage, timestamp) {
         const merchantId = "CHECKOUT_MERCHANT_ID";
         const secretKey = "CHECKOUT_SECRET_KEY";
-        
+
         const hash = crypto.createHash('sha512');
         hash.update(requestMessage + secretKey + timestamp);
         const hashString = hash.digest('hex');
@@ -62,3 +80,4 @@ class SveaAuth {
 }
 
 SveaAuth.sendRequest();
+

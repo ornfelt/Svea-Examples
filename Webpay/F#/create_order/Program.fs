@@ -2,6 +2,12 @@
 open System.IO
 open System.Net
 open System.Text
+open System.Text.RegularExpressions
+
+let saveOrderIdToFile (orderId: string) =
+    let filePath = "../created_order_id.txt"
+    File.WriteAllText(filePath, orderId)
+    Console.WriteLine($"SveaOrderId saved to {filePath}")
 
 let generateRandomOrderId () =
     let random = Random()
@@ -94,6 +100,16 @@ let sendSoapRequest (url: string) (action: string) (soapXml: string) =
             
             if response.StatusCode = HttpStatusCode.OK && responseContent.ToLower().Contains("accepted>true") then
                 Console.WriteLine("Success!")
+
+                // Extract SveaOrderId using regex
+                let sveaOrderIdRegex = @"<SveaOrderId>(\d+)</SveaOrderId>"
+                let regMatch = Regex.Match(responseContent, sveaOrderIdRegex, RegexOptions.IgnoreCase)
+                if regMatch.Success then
+                    let sveaOrderId = regMatch.Groups.[1].Value
+                    Console.WriteLine($"SveaOrderId extracted: {sveaOrderId}")
+                    saveOrderIdToFile sveaOrderId
+                else
+                    Console.WriteLine("Failed to extract SveaOrderId.")
             else
                 Console.WriteLine("Failed...")
             Console.WriteLine("----------------------------------------------------------")

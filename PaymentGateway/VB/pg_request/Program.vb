@@ -98,10 +98,10 @@ Module Program
     End Function
 
     Sub Main()
-        Console.WriteLine("Running GET request for PaymentGateway (VB.NET)")
-        MakeGetQueryTransactionIdRequestAsync().Wait()
         Console.WriteLine("Running Create request for PaymentGateway (VB.NET)")
         MakePostRequestAsync().Wait()
+        Console.WriteLine("Running GET request for PaymentGateway (VB.NET)")
+        MakeGetQueryTransactionIdRequestAsync().Wait()
         Console.WriteLine("----------------------------------------------------------")
     End Sub
 End Module

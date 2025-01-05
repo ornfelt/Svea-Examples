@@ -4,8 +4,8 @@ from pandas import json_normalize
 import hashlib
 import base64
 import requests
+from pathlib import Path
 
-order_id = "CHECKOUT_ORDER_TO_FETCH"
 merchant_id = "CHECKOUT_MERCHANT_ID"
 secret_word = "CHECKOUT_SECRET_KEY"
 
@@ -36,6 +36,19 @@ testInstance = TestClass()
 my_headers = testInstance.get_request_headers()
 #print(my_headers)
 
+order_id = ""
+try:
+    order_id_path = Path("./created_order_id.txt")
+    with open(order_id_path, "r") as file:
+        order_id = file.read().strip()
+    #print(f"Using OrderId: {order_id}")
+except FileNotFoundError:
+    print("Error: OrderId file not found.")
+    exit()
+except Exception as e:
+    print(f"Error reading OrderId: {e}")
+    exit()
+
 url = "https://checkoutapistage.svea.com/api/orders/" + order_id
 #url = "https://paymentadminapistage.svea.com/api/v1/orders/" + order_id
 payload = {}
@@ -55,3 +68,4 @@ if response:
     dictr = response.json()
     result = json_normalize(dictr)
     #print(result)
+

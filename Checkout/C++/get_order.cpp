@@ -6,37 +6,45 @@
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include "SveaAuth.h"
 
 int main() {
     std::cout << "Running GET request for Checkout (C++)" << std::endl;
-    // Define merchant ID and secret word
+    // Credentials
     std::string merchant_id = "CHECKOUT_MERCHANT_ID";
     std::string secret_word = "CHECKOUT_SECRET_KEY";
-    std::string order_id = "CHECKOUT_ORDER_TO_FETCH";
+    std::string order_id = "";
 
-    // Create an instance of SveaAuth and set merchant ID and secret word
+    std::ifstream orderFile("./created_order_id.txt");
+    if (orderFile.is_open()) {
+        std::getline(orderFile, order_id);
+        orderFile.close();
+        //std::cout << "Using OrderId: " << order_id << std::endl;
+    } else {
+        std::cerr << "Failed to open ../created_order_id.txt. Ensure the file exists and is readable." << std::endl;
+        return 1;
+    }
+
     SveaAuth sveaAuthInstance;
     sveaAuthInstance.setMerchantId(merchant_id);
     sveaAuthInstance.setSecretWord(secret_word);
 
-    // Prepare the HTTP request with the headers
     web::http::http_request my_headers = sveaAuthInstance.get_request_headers();
 
-    // Set up the HTTP client
     web::http::client::http_client_config config;
+
+    // Could also use PA api if order is finalized
     web::http::client::http_client client("https://checkoutapistage.svea.com/api/orders/" + order_id, config);
     //web::http::client::http_client client("https://paymentadminapistage.svea.com/api/v1/orders/" + order_id, config);
 
-    // Set up the HTTP GET request
     web::http::http_request request(web::http::methods::GET);
     for (const auto& header : my_headers.headers()) {
         request.headers().add(header.first, header.second);
     }
 
-    // Send the request and wait for the response
     web::http::http_response response = client.request(request).get();
     //std::cout << "Response status: " << response.status_code() << std::endl;
 

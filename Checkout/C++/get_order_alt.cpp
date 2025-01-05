@@ -9,6 +9,7 @@
 #include <cpprest/http_headers.h>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 #include <chrono>
 #include <openssl/sha.h>
 #include <codecvt>
@@ -94,9 +95,20 @@ int main() {
     web::http::http_headers my_headers = testInstance.get_request_headers();
     //web::http::http_headers my_headers = testInstance.get_request_headers({"Content-Type", "application/json"});
 
-    utility::string_t order_id = U("CHECKOUT_ORDER_TO_FETCH");
-    //utility::string_t url = U("https://checkoutapistage.svea.com/api/orders/") + order_id;
-    utility::string_t url = U("https://paymentadminapistage.svea.com/api/v1/orders/") + order_id;
+    utility::string_t order_id = U("");
+    std::ifstream orderFile("./created_order_id.txt");
+    if (orderFile.is_open()) {
+        std::getline(orderFile, order_id);
+        orderFile.close();
+        std::cout << "OrderId read from file: " << order_id << std::endl;
+    } else {
+        std::cerr << "Failed to open ../created_order_id.txt. Ensure the file exists and is readable." << std::endl;
+        return 1; // Exit the program with an error code
+    }
+
+    // Could also use PA api if order is finalized
+    utility::string_t url = U("https://checkoutapistage.svea.com/api/orders/") + order_id;
+    //utility::string_t url = U("https://paymentadminapistage.svea.com/api/v1/orders/") + order_id;
     web::http::http_request request(web::http::methods::GET);
     request.headers() = my_headers;
 

@@ -2,6 +2,7 @@
 open System.Net
 open System.Net.Http
 open System.Text
+open System.IO
 
 // [<EntryPoint>]
 let main argv =
@@ -26,7 +27,7 @@ let main argv =
                                 <dat:GetOrderInformation>
                                     <dat:ClientId>WEBPAY_CLIENT_ID</dat:ClientId>
                                     <dat:OrderType>Invoice</dat:OrderType>
-                                    <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH</dat:SveaOrderId>
+                                    <dat:SveaOrderId>WEBPAY_ORDER_TO_FETCH_VALUE</dat:SveaOrderId>
                                 </dat:GetOrderInformation>
                             </dat:OrdersToRetrieve>
                         </tem:request>
@@ -35,9 +36,19 @@ let main argv =
             </soap:Envelope>
             """
 
+        let orderIdFilePath = "../created_order_id.txt"
+        let sveaOrderId = 
+            if File.Exists(orderIdFilePath) then
+                File.ReadAllText(orderIdFilePath).Trim()
+            else
+                failwithf "Order ID file not found: %s" orderIdFilePath
+
+        //Console.WriteLine("Using SveaOrderId: " + sveaOrderId)
+        let updatedSoapEnvelope = soapEnvelope.Replace("WEBPAY_ORDER_TO_FETCH_VALUE", sveaOrderId)
+
         use client = new HttpClient()
         let request = new HttpRequestMessage(HttpMethod.Post, url)
-        request.Content <- new StringContent(soapEnvelope, Encoding.UTF8, "application/soap+xml")
+        request.Content <- new StringContent(updatedSoapEnvelope, Encoding.UTF8, "application/soap+xml")
         request.Headers.Add("SOAPAction", soapAction)
 
         let! response = client.SendAsync(request) |> Async.AwaitTask
@@ -55,3 +66,4 @@ let main argv =
     } |> Async.RunSynchronously
 
 main [||]
+

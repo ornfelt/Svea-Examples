@@ -4,8 +4,8 @@ use sha2::{Sha512, Digest};
 use base64::encode;
 use std::collections::HashMap;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
+use std::fs;
 
-const ORDER_ID: &str = "CHECKOUT_ORDER_TO_FETCH";
 const MERCHANT_ID: &str = "CHECKOUT_MERCHANT_ID";
 const SECRET_WORD: &str = "CHECKOUT_SECRET_KEY";
 //const BASE_URL: &str = "https://paymentadminapistage.svea.com/api/v1/orders/";
@@ -50,9 +50,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //println!("{:?}", my_headers);
 
-    let url = format!("{}{}", BASE_URL, ORDER_ID);
+    let order_id = match fs::read_to_string("../created_order_id.txt") {
+        Ok(content) => content.trim().to_string(),
+        Err(e) => {
+            eprintln!("Failed to read OrderId from file: {}", e);
+            return Ok(()); // Exit early if the file cannot be read
+        }
+    };
 
-    //println!("Fetching order: {}", ORDER_ID);
+    //println!("Using OrderID: {}", order_id);
+    let url = format!("{}{}", BASE_URL, order_id);
+
+    //println!("Fetching order: {}", order_id);
+
     let client = reqwest::Client::new();
     let res = client.get(&url)
         .headers(my_headers)
@@ -71,3 +81,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+

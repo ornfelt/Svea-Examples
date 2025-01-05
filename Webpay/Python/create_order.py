@@ -1,5 +1,7 @@
 import requests
 import random
+import re
+import os
 
 def main():
     print("Running Create request for Webpay (Python)")
@@ -79,6 +81,18 @@ def main():
 
         if response.status_code == 200 and "accepted>true" in response.text.lower():
             print("Success!")
+            svea_order_id_match = re.search(r"<(?:\w+:)?SveaOrderId>(\d+)</(?:\w+:)?SveaOrderId>", response.text)
+            if svea_order_id_match:
+                svea_order_id = svea_order_id_match.group(1)
+                #print(f"SveaOrderId extracted: {svea_order_id}")
+
+                output_file = "./created_order_id.txt"
+                os.makedirs(os.path.dirname(output_file), exist_ok=True)
+                with open(output_file, "w") as f:
+                    f.write(svea_order_id)
+                #print(f"SveaOrderId saved to {output_file}")
+            else:
+                print("Failed to extract SveaOrderId.")
         else:
             print("Failed...")
         print("----------------------------------------------------------")
@@ -88,3 +102,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

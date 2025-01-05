@@ -50,9 +50,27 @@ impl SveaAuth {
         //    Err(e) => println!("Error reading response text: {}", e),
         //}
 
-        // Check specifically for status codes 200 or 201
         if status_code == 200 || status_code == 201 {
             println!("Success!");
+
+            if let Ok(text) = response.text().await {
+                if let Ok(json_response) = serde_json::from_str::<Value>(&text) {
+                    if let Some(order_id) = json_response["OrderId"].as_u64() {
+                        if let Err(e) = fs::write("../created_order_id.txt", order_id.to_string()) {
+                            println!("Error saving OrderId to file: {}", e);
+                        } else {
+                            //println!("OrderId saved to ../created_order_id.txt: {}", order_id);
+                        }
+                    } else {
+                        println!("OrderId not found in the response.");
+                    }
+                } else {
+                    println!("Failed to parse response JSON.");
+                }
+            } else {
+                println!("Failed to read response text.");
+            }
+
         } else {
             println!("Failed...");
         }
@@ -88,3 +106,4 @@ impl SveaAuth {
 async fn main() {
     SveaAuth::send_request().await;
 }
+

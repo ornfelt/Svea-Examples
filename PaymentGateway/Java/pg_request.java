@@ -22,10 +22,10 @@ import org.xml.sax.InputSource;
 public class pg_request {
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-        System.out.println("Running GET request for PaymentGateway (Java)");
-        makeGetQueryTransactionIdRequest();
         System.out.println("Running Create request for PaymentGateway (Java)");
         makePostRequest();
+        System.out.println("Running GET request for PaymentGateway (Java)");
+        makeGetQueryTransactionIdRequest();
         System.out.println("----------------------------------------------------------");
     }
 
